@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodBridge – Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;
+  --surface:#111111;
+  --surface2:#181818;
+  --surface3:#1f1f1f;
+  --primary:#3f9f6a;
+  --primary-dark:#2f7a52;
+  --primary-glow:rgba(63,159,106,0.18);
+  --accent:#e8784f;
+  --text:#f0ebe4;
+  --text-dim:#c8bfb5;
+  --muted:#7a7068;
+  --border:#242424;
+  --border-light:#2e2e2e;
+}
+body.light{
+  --bg:#fdf6ec;
+  --surface:#ffffff;
+  --surface2:#fff8f0;
+  --surface3:#fef2e6;
+  --primary:#c8522a;
+  --primary-dark:#a94422;
+  --primary-glow:rgba(200,82,42,0.14);
+  --accent:#2e9e56;
+  --text:#2c1a0e;
+  --text-dim:#6b4c38;
+  --muted:#8c7060;
+  --border:#e8d8c8;
+  --border-light:#ddc8b0;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;
+  transition:background 0.3s,color 0.3s;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:0.5;
+}
+
+/* LEFT */
+.left-panel{
+  flex:1;display:flex;flex-direction:column;padding:60px;
+  position:relative;overflow:hidden;
+  background:var(--surface);border-right:1px solid var(--border);
+}
+.left-panel::before{
+  content:'';position:absolute;top:-80px;left:-80px;
+  width:550px;height:550px;
+  background:radial-gradient(circle,var(--primary-glow),transparent 65%);
+  filter:blur(80px);pointer-events:none;
+}
+.left-panel::after{
+  content:'';position:absolute;bottom:-60px;right:-40px;
+  width:350px;height:350px;
+  background:radial-gradient(circle,rgba(232,120,79,0.08),transparent 65%);
+  filter:blur(60px);pointer-events:none;
+}
+
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;position:relative;z-index:1;}
+.logo-icon{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;
+  box-shadow:0 4px 16px var(--primary-glow);
+}
+.logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);}
+.logo-text span{color:var(--primary);}
+
+.left-content{
+  position:relative;z-index:1;
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:40px 0;
+}
+.left-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--primary);font-weight:600;margin-bottom:20px;
+}
+.left-eyebrow span{width:24px;height:2px;background:var(--primary);display:block;}
+.left-content h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,3.5vw,48px);line-height:1.1;margin-bottom:14px;
+}
+.left-content h1 em{font-style:italic;color:var(--primary);}
+.left-content p{color:var(--muted);font-size:14px;line-height:1.7;max-width:360px;margin-bottom:36px;}
+
+.role-highlights{display:flex;flex-direction:column;gap:12px;max-width:380px;}
+.role-hl{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+  transition:border-color 0.2s;cursor:default;
+}
+.role-hl:hover{border-color:var(--border-light);}
+.role-hl.active-hl{border-color:var(--primary);background:rgba(63,159,106,0.06);}
+body.light .role-hl.active-hl{border-color:var(--primary);background:rgba(200,82,42,0.06);}
+.role-hl-icon{font-size:22px;width:36px;text-align:center;}
+.role-hl-text strong{font-size:14px;font-weight:600;display:block;margin-bottom:2px;}
+.role-hl-text span{font-size:12px;color:var(--muted);}
+
+/* RIGHT */
+.right-panel{
+  flex:1.1;display:flex;align-items:center;justify-content:center;
+  padding:48px;overflow-y:auto;position:relative;
+}
+.right-panel::-webkit-scrollbar{width:5px;}
+.right-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px;}
+
+.theme-btn{
+  position:absolute;top:24px;right:24px;
+  width:38px;height:38px;border:1px solid var(--border);
+  background:transparent;border-radius:9px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;color:var(--muted);
+}
+.theme-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+.form-card{width:100%;max-width:480px;}
+.form-header{margin-bottom:32px;}
+.form-header h2{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:8px;}
+.form-header p{color:var(--muted);font-size:14px;}
+.form-header p a{color:var(--primary);text-decoration:none;font-weight:500;}
+.form-header p a:hover{text-decoration:underline;}
+
+/* ROLE TABS */
+.role-tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  background:var(--surface2);border:1.5px solid var(--border-light);
+  border-radius:12px;padding:4px;gap:4px;margin-bottom:28px;
+}
+.role-tab{
+  padding:10px 6px;border:none;background:transparent;
+  border-radius:9px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.role-tab.active{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;box-shadow:0 2px 12px var(--primary-glow);
+}
+
+/* FORM ELEMENTS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+input,select,textarea{
+  width:100%;padding:12px 16px;
+  border:1.5px solid var(--border-light);border-radius:12px;
+  background:var(--surface2);
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
+  outline:none;transition:border 0.2s,background 0.2s,box-shadow 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+input::placeholder{color:var(--muted);opacity:0.55;}
+input:focus,select:focus{
+  border-color:var(--primary);background:var(--surface3);
+  box-shadow:0 0 0 4px var(--primary-glow);
+}
+select option{background:var(--surface2);color:var(--text);}
+
+.input-icon-wrap{position:relative;}
+.input-icon-wrap input{padding-left:44px;}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:0.4;}
+.input-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;
+  padding:0;transition:color 0.2s;
+}
+.input-toggle:hover{color:var(--primary);}
+
+/* SECTION DIVIDERS */
+.section-divider{
+  display:flex;align-items:center;gap:12px;margin:20px 0 16px;
+}
+.section-divider span{
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);font-weight:600;white-space:nowrap;
+}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* EXTRA FIELDS */
+.extra-fields{display:none;animation:fadeUp 0.3s ease;}
+.extra-fields.show{display:block;}
+
+.info-banner{
+  background:rgba(63,159,106,0.08);border:1px solid rgba(63,159,106,0.2);
+  border-radius:10px;padding:12px 16px;font-size:13px;color:var(--muted);
+  line-height:1.6;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;
+}
+body.light .info-banner{background:rgba(200,82,42,0.07);border-color:rgba(200,82,42,0.18);}
+.info-banner .info-icon{font-size:16px;margin-top:1px;}
+
+/* TERMS */
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin:20px 0;}
+.terms-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;padding:0;accent-color:var(--primary);cursor:pointer;flex-shrink:0;}
+.terms-row label{font-size:13px;color:var(--muted);cursor:pointer;line-height:1.6;}
+.terms-row a{color:var(--primary);text-decoration:none;}
+.terms-row a:hover{text-decoration:underline;}
+
+.btn-submit{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;border:none;border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;
+  cursor:pointer;transition:opacity 0.2s,transform 0.15s;
+  box-shadow:0 6px 24px var(--primary-glow);
+  letter-spacing:0.2px;position:relative;overflow:hidden;
+}
+.btn-submit::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,0.08),transparent);
+  transform:translateX(-100%);transition:transform 0.5s;
+}
+.btn-submit:hover::after{transform:translateX(100%);}
+.btn-submit:hover{opacity:0.9;transform:translateY(-1px);}
+
+.strength-bar{height:3px;border-radius:4px;background:var(--border);margin-top:8px;overflow:hidden;}
+.strength-fill{height:100%;width:0%;border-radius:4px;transition:width 0.3s,background 0.3s;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.form-card{animation:fadeUp 0.5s ease both;}
+
+@media(max-width:860px){
+  .left-panel{display:none;}
+  .right-panel{padding:32px 20px;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body class="dark">
+
+<div class="left-panel">
+  <a href="/" class="nav-logo">
+    <div class="logo-text">Food<span>Bridge</span></div>
+  </a>
+
+  <div class="left-content">
+    <div class="left-eyebrow"><span></span>Join the movement</div>
+    <h1>Make waste<br>mean <em>something</em></h1>
+    <p>Every surplus meal is an opportunity. Join FoodBridge and be the bridge between food waste and food security.</p>
+
+    </div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+
+  <div class="form-card">
+    <div class="form-header">
+      <h2>Create your account</h2>
+      <p>Already have one? <a href="/login">Sign in →</a></p>
+    </div>
+
+    <div class="role-tabs" id="roleTabs">
+      <button class="role-tab active" onclick="setRole('donor',this)">Donor</button>
+      <button class="role-tab" onclick="setRole('ngo',this)">NGO</button>
+      <button class="role-tab" onclick="setRole('volunteer',this)">Volunteer</button>
+    </div>
+
+    <form method="POST" action="/do_signup" onsubmit="prepareSubmit()">
+      <input type="hidden" name="role" id="roleInput" value="donor">
+      <input type="hidden" name="name" id="nameHidden">
+
+      <div class="section-divider"><span>Personal Info</span></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <div class="input-icon-wrap">
+            <input type="text" id="fname" name="fname" placeholder="Rahul" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" id="lname" name="lname" placeholder="Sharma">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-icon-wrap">
+          <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mobile Number</label>
+        <div class="input-icon-wrap">
+          <input type="tel" name="mobile" placeholder="+91 98765 43210" required>
+        </div>
+      </div>
+
+      <!-- NGO FIELDS -->
+      <div class="extra-fields" id="ngoFields">
+        <div class="section-divider"><span>Organisation Details</span></div>
+        <div class="info-banner">
+          Your NGO registration will be verified within 24 hours before activation.
+        </div>
+        <div class="form-group">
+          <label class="form-label">Organisation Name</label>
+          <input type="text" name="org_name" placeholder="Asha Foundation">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Registration No.</label>
+            <input type="text" name="reg_no" placeholder="REG/2024/001">
+          </div>
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input type="text" name="city" placeholder="Pune">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Capacity (Meals/Day)</label>
+          <select name="capacity">
+            <option value="">Select capacity</option>
+            <option>1–50 meals/day</option>
+            <option>50–200 meals/day</option>
+            <option>200–500 meals/day</option>
+            <option>500+ meals/day</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- VOLUNTEER FIELDS -->
+      <div class="extra-fields" id="volunteerFields">
+        <div class="section-divider"><span>Volunteer Details</span></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Availability</label>
+            <select name="availability">
+              <option value="Weekdays">Weekdays</option>
+              <option value="Weekends">Weekends</option>
+              <option value="Anytime">Anytime</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transport</label>
+            <select name="transport">
+              <option>Bicycle</option>
+              <option>Motorcycle</option>
+              <option>Car</option>
+              <option>Walk</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Area / Locality</label>
+          <input type="text" name="area" placeholder="e.g. Baner, Pune">
+        </div>
+      </div>
+
+      <div class="section-divider"><span>Security</span></div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-icon-wrap">
+          <input type="password" name="password" id="passInput" placeholder="Minimum 8 characters" required oninput="checkStrength(this.value)">
+          <button type="button" class="input-toggle" onclick="togglePass()">Show</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+      </div>
+
+      <div class="terms-row">
+        <input type="checkbox" id="termsCheck" required>
+        <label for="termsCheck">I agree to FoodBridge's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Create Account →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  const saved = localStorage.getItem("theme") || "dark";
+  if(saved === "light"){
+    document.body.classList.add("light");
+    document.getElementById("themeBtn").textContent = "☀️";
+  }
+})();
+function toggleTheme(){
+  const body = document.body;
+  const btn = document.getElementById("themeBtn");
+  if(body.classList.contains("light")){
+    body.classList.remove("light");
+    localStorage.setItem("theme","dark");
+    btn.textContent = "🌙";
+  } else {
+    body.classList.add("light");
+    localStorage.setItem("theme","light");
+    btn.textContent = "☀️";
+  }
+}
+
+function setRole(role, el){
+  document.getElementById("roleInput").value = role;
+  document.querySelectorAll(".role-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+
+  document.getElementById("ngoFields").classList.toggle("show", role === "ngo");
+  document.getElementById("volunteerFields").classList.toggle("show", role === "volunteer");
+
+  // Update left panel highlights
+  ["donor","ngo","volunteer"].forEach(r => {
+    const hl = document.getElementById("hl-" + r);
+    if(hl) hl.classList.toggle("active-hl", r === role);
+  });
+}
+
+function prepareSubmit(){
+  const fname = document.getElementById("fname").value.trim();
+  const lname = document.getElementById("lname").value.trim();
+  document.getElementById("nameHidden").value = (fname + " " + lname).trim();
+}
+
+function togglePass(){
+  const input = document.getElementById("passInput");
+  const btn = input.nextElementSibling;
+  if(input.type === "password"){input.type = "text";btn.textContent = "Hide";}
+  else{input.type = "password";btn.textContent = "Show";}
+}
+
+function checkStrength(val){
+  const fill = document.getElementById("strengthFill");
+  let score = 0;
+  if(val.length >= 8) score++;
+  if(/[A-Z]/.test(val)) score++;
+  if(/[0-9]/.test(val)) score++;
+  if(/[^A-Za-z0-9]/.test(val)) score++;
+  const colors = ["","#d94040","#e8784f","#f0a500","#3f9f6a"];
+  const widths = ["0%","25%","50%","75%","100%"];
+  fill.style.width = widths[score] || "0%";
+  fill.style.background = colors[score] || "transparent";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodBridge – Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;
+  --surface:#111111;
+  --surface2:#181818;
+  --surface3:#1f1f1f;
+  --primary:#3f9f6a;
+  --primary-dark:#2f7a52;
+  --primary-glow:rgba(63,159,106,0.15);
+  --accent:#e8784f;
+  --accent-dim:rgba(232,120,79,0.12);
+  --text:#f0ebe4;
+  --text-dim:#c8bfb5;
+  --muted:#7a7068;
+  --border:#242424;
+  --border-light:#2e2e2e;
+  --shadow:0 8px 40px rgba(0,0,0,0.6);
+}
+body.light{
+  --bg:#fdf6ec;
+  --surface:#ffffff;
+  --surface2:#fff8f0;
+  --surface3:#fef2e6;
+  --primary:#c8522a;
+  --primary-dark:#a94422;
+  --primary-glow:rgba(200,82,42,0.12);
+  --accent:#2e9e56;
+  --accent-dim:rgba(46,158,86,0.12);
+  --text:#2c1a0e;
+  --text-dim:#6b4c38;
+  --muted:#8c7060;
+  --border:#e8d8c8;
+  --border-light:#ddc8b0;
+  --shadow:0 8px 40px rgba(140,80,40,0.12);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background 0.3s,color 0.3s;
+  overflow-x:hidden;
+}
+
+/* GRAIN */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:0.6;
+}
+
+/* NAV */
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 48px;
+  height:68px;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+body:not(.light) nav{background:rgba(10,10,10,0.8);}
+body.light nav{background:rgba(253,246,236,0.88);}
+
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-icon{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  box-shadow:0 4px 16px var(--primary-glow);
+}
+.logo-text{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  color:var(--text);
+}
+.logo-text span{color:var(--primary);}
+
+.nav-right{display:flex;align-items:center;gap:8px;}
+.nav-links{display:flex;align-items:center;gap:2px;margin-right:8px;}
+.nav-link{
+  text-decoration:none;
+  padding:7px 14px;
+  border-radius:8px;
+  font-size:13px;font-weight:500;
+  color:var(--muted);
+  transition:color 0.2s,background 0.2s;
+}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+body.light .nav-link:hover{background:rgba(0,0,0,0.04);}
+
+.theme-btn{
+  width:38px;height:38px;
+  border:1px solid var(--border);
+  background:transparent;
+  border-radius:9px;
+  cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;color:var(--muted);
+}
+.theme-btn:hover{border-color:var(--primary);color:var(--primary);}
+
+.btn-ghost{
+  text-decoration:none;
+  padding:8px 18px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:13px;font-weight:500;
+  color:var(--muted);
+  transition:all 0.2s;
+}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary);}
+
+.btn-primary{
+  text-decoration:none;
+  padding:9px 20px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  border-radius:9px;
+  font-size:13px;font-weight:600;
+  color:#fff;
+  box-shadow:0 4px 20px var(--primary-glow);
+  transition:opacity 0.2s,transform 0.15s;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);}
+
+/* HERO */
+.hero{
+  min-height:calc(100vh - 68px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:80px 24px 100px;
+  position:relative;overflow:hidden;
+}
+
+.hero-glow{
+  position:absolute;
+  top:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:700px;
+  background:radial-gradient(ellipse at center,var(--primary-glow) 0%,transparent 65%);
+  filter:blur(80px);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:6px 18px;
+  font-size:12px;font-weight:500;
+  color:var(--primary);
+  margin-bottom:32px;
+  animation:fadeDown 0.7s ease both;
+}
+.hero-dot{width:6px;height:6px;background:var(--primary);border-radius:50%;animation:pulse 2s infinite;}
+
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(40px,6vw,76px);
+  line-height:1.08;
+  margin-bottom:24px;
+  max-width:800px;
+  animation:fadeDown 0.7s 0.1s ease both;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--primary);
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:16px;line-height:1.7;
+  max-width:480px;
+  margin-bottom:44px;
+  animation:fadeDown 0.7s 0.2s ease both;
+}
+
+.hero-btns{
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  animation:fadeDown 0.7s 0.3s ease both;
+}
+.hero-btn-lg{
+  text-decoration:none;
+  padding:14px 32px;
+  border-radius:12px;
+  font-size:15px;font-weight:600;
+}
+.hero-btn-primary{
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;
+  box-shadow:0 8px 32px var(--primary-glow);
+  transition:transform 0.2s,opacity 0.2s;
+}
+.hero-btn-primary:hover{transform:translateY(-2px);opacity:0.9;}
+.hero-btn-outline{
+  border:1px solid var(--border);
+  color:var(--muted);
+  transition:all 0.2s;
+}
+.hero-btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+
+/* SCROLL INDICATOR */
+.scroll-indicator{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0.3;animation:bounce 2s infinite;
+}
+.scroll-indicator span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+
+/* STATS STRIP */
+.stats-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat-item{
+  padding:36px 40px;
+  text-align:center;
+  border-right:1px solid var(--border);
+  animation:fadeUp 0.6s ease both;
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:42px;color:var(--primary);
+  display:block;margin-bottom:6px;
+}
+.stat-label{font-size:13px;color:var(--muted);}
+
+/* FEATURES */
+.features-section{padding:100px 48px;}
+.section-header{text-align:center;margin-bottom:60px;}
+.section-eyebrow{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--primary);font-weight:600;margin-bottom:14px;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,46px);
+  margin-bottom:14px;
+}
+.section-sub{color:var(--muted);font-size:15px;max-width:440px;margin:0 auto;}
+
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  max-width:1100px;margin:0 auto;
+}
+.feature-card{
+  background:var(--surface);
+  padding:44px 36px;
+  position:relative;overflow:hidden;
+  transition:background 0.3s;
+}
+.feature-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 30%,var(--primary-glow),transparent 60%);
+  opacity:0;transition:opacity 0.4s;
+}
+.feature-card:hover::before{opacity:1;}
+.feature-card:hover{background:var(--surface2);}
+.f-icon{
+  font-size:36px;margin-bottom:22px;
+  display:block;
+}
+.f-title{
+  font-family:'Playfair Display',serif;
+  font-size:20px;margin-bottom:10px;
+}
+.f-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+.f-link{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:20px;font-size:13px;font-weight:500;
+  color:var(--primary);text-decoration:none;
+  transition:gap 0.2s;
+}
+.f-link:hover{gap:10px;}
+
+/* HOW IT WORKS */
+.how-section{
+  padding:100px 48px;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.steps{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  max-width:1100px;margin:0 auto;
+}
+.step{position:relative;text-align:center;}
+.step::after{
+  content:'→';
+  position:absolute;top:28px;right:-16px;
+  color:var(--border-light);font-size:20px;
+}
+.step:last-child::after{display:none;}
+.step-num{
+  width:56px;height:56px;
+  border:2px solid var(--primary);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:20px;color:var(--primary);
+  margin:0 auto 20px;
+}
+.step-title{font-weight:600;margin-bottom:8px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* CTA */
+.cta-section{
+  padding:120px 48px;text-align:center;position:relative;overflow:hidden;
+}
+.cta-glow{
+  position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);
+  width:700px;height:500px;
+  background:radial-gradient(ellipse,var(--accent-dim),transparent 70%);
+  filter:blur(60px);pointer-events:none;
+}
+.cta-section h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,52px);
+  margin-bottom:16px;max-width:700px;margin-left:auto;margin-right:auto;
+}
+.cta-section p{color:var(--muted);font-size:15px;margin-bottom:40px;}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:40px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-copy{font-size:13px;color:var(--muted);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--primary);}
+
+/* ANIMATIONS */
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.4;transform:scale(0.8);}
+}
+@keyframes bounce{
+  0%,100%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(6px);}
+}
+
+@media(max-width:900px){
+  .features-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr 1fr;}
+  .step::after{display:none;}
+  .stats-strip{grid-template-columns:1fr;}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border);}
+  nav{padding:0 20px;}
+  .features-section,.how-section,.cta-section{padding:60px 24px;}
+}
+</style>
+</head>
+<body class="dark">
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🍱</div>
+    <div class="logo-text">Food<span>Bridge</span></div>
+  </a>
+  <div class="nav-right">
+    <nav class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#how" class="nav-link">How it Works</a>
+    </nav>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <a href="/login" class="btn-ghost">Login</a>
+    <a href="/signup" class="btn-primary">Get Started →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">
+    <span class="hero-dot"></span>
+    Turning surplus food into meals
+  </div>
+  <h1>Reduce Waste,<br><h1>Feed Lives</h1></h1>
+  <p>FoodBridge connects food donors, NGOs, and volunteers to redirect surplus food to those who need it most — in real time.</p>
+  <div class="hero-btns">
+    <a href="/signup" class="hero-btn-lg hero-btn-primary">Start Donating Today</a>
+    <a href="#how" class="hero-btn-lg hero-btn-outline">How it Works</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div>↓</div>
+  </div>
+</section>
+
+<div class="stats-strip">
+  <div class="stat-item">
+    <span class="stat-num">{{ meals }}</span>
+    <span class="stat-label">Meals Delivered</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">{{ donors }}</span>
+    <span class="stat-label">Active Donors</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">{{ ngos }}</span>
+    <span class="stat-label">Partner NGOs</span>
+  </div>
+</div>
+
+<section class="features-section" id="features">
+  <div class="section-header">
+    <div class="section-eyebrow">Built for Everyone</div>
+    <h2 class="section-title">One platform,<br>three powerful roles</h2>
+    <p class="section-sub">Whether you're giving, receiving, or delivering — FoodBridge has tools built for you.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="f-icon">🍽</span>
+      <div class="f-title">Donors</div>
+      <p class="f-desc">Individuals, restaurants, and businesses can post surplus food in seconds and track its journey from plate to purpose.</p>
+      <a href="/signup" class="f-link">Donate food →</a>
+    </div>
+    <div class="feature-card">
+      <span class="f-icon">🏢</span>
+      <div class="f-title">NGOs</div>
+      <p class="f-desc">Registered organisations can browse available donations, accept them with one click, and coordinate pickups with our volunteer network.</p>
+      <a href="/signup" class="f-link">Register as NGO →</a>
+    </div>
+    <div class="feature-card">
+      <span class="f-icon">🚴</span>
+      <div class="f-title">Volunteers</div>
+      <p class="f-desc">Delivery volunteers see nearby assignments, pick up food from donors, and deliver to NGOs — with OTP-verified handoffs.</p>
+      <a href="/signup" class="f-link">Volunteer now →</a>
+    </div>
+  </div>
+</section>
+
+<section class="how-section" id="how">
+  <div class="section-header">
+    <div class="section-eyebrow">The Process</div>
+    <h2 class="section-title">Four steps to<br>real impact</h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Donor Posts</div>
+      <p class="step-desc">List surplus food with quantity, type, and availability window.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">NGO Accepts</div>
+      <p class="step-desc">Nearby NGOs review and claim the donation instantly.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Volunteer Picks Up</div>
+      <p class="step-desc">A volunteer collects the food from the donor's location.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Delivered ✓</div>
+      <p class="step-desc">OTP-verified delivery completes the chain. Impact logged.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2>Ready to make a difference today?</h2>
+  <p>Join hundreds of donors, NGOs, and volunteers already using FoodBridge.</p>
+  <a href="/signup" class="hero-btn-lg hero-btn-primary">Create Free Account</a>
+</section>
+
+<footer>
+  <div class="logo">
+    <div class="logo-icon">🍱</div>
+    <div class="logo-text">Food<span>Bridge</span></div>
+  </div>
+
+  <span class="footer-copy">© 2026 FoodBridge · Built for Social Impact ❤️</span>
+</footer>
+
+<script>
+(function(){
+  const saved = localStorage.getItem("theme") || "dark";
+  if(saved === "light"){
+    document.body.classList.add("light");
+    document.getElementById("themeBtn").textContent = "☀️";
+  }
+})();
+function toggleTheme(){
+  const body = document.body;
+  const btn = document.getElementById("themeBtn");
+  if(body.classList.contains("light")){
+    body.classList.remove("light");
+    localStorage.setItem("theme","dark");
+    btn.textContent = "🌙";
+  } else {
+    body.classList.add("light");
+    localStorage.setItem("theme","light");
+    btn.textContent = "☀️";
+  }
+}
+
+// Animate stats on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.style.animationPlayState = "running";
+  });
+},{threshold:0.2});
+document.querySelectorAll(".stat-item,.feature-card,.step").forEach(el => {
+  el.style.animationPlayState = "paused";
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

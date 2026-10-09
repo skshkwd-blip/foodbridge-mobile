@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodBridge – Volunteer Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e11;
+      --surface: #18181b;
+      --surface2: #16161a;
+      --surface3: #1f1f23;
+      --primary: #3f9f6a;
+      --primary-dark: #2f7a52;
+      --primary-glow: rgba(63,159,106,0.18);
+      --accent: #e8784f;
+      --warning: #f0a500;
+      --warning-dim: rgba(240,165,0,0.12);
+      --success: #4fc87a;
+      --success-dim: rgba(79,200,122,0.12);
+      --error: #d94040;
+      --error-dim: rgba(217,64,64,0.12);
+      --text: #f0ebe4;
+      --text-dim: #c8bfb5;
+      --muted: #7a7068;
+      --border: #242424;
+      --border-light: #2e2e2e;
+      --shadow: 0 4px 32px rgba(0,0,0,0.5);
+      --sidebar-w: 248px;
+      --role-bg: rgba(63,159,106,0.10);
+      --role-border: rgba(63,159,106,0.22);
+      --role-color: #3f9f6a;
+      --active-bg: rgba(63,159,106,0.12);
+      --active-border: rgba(63,159,106,0.18);
+      --active-color: #3f9f6a;
+      --stat-value-color: #3f9f6a;
+      --badge-bg: rgba(63,159,106,0.12);
+      --badge-border: rgba(63,159,106,0.18);
+      --badge-color: #3f9f6a;
+      --input-focus-border: #3f9f6a;
+      --input-focus-shadow: rgba(63,159,106,0.12);
+      --btn-primary-from: #2f7a52;
+      --btn-primary-to: #3f9f6a;
+      --btn-accept-from: #b06800;
+      --btn-accept-to: #f0a500;
+      --btn-accept-shadow: rgba(240,165,0,0.2);
+      --topbar-bg: rgba(14,14,17,0.92);
+      --filter-bg: rgba(255,255,255,0.025);
+      --filter-border: rgba(255,255,255,0.06);
+      --filter-active-bg: rgba(63,159,106,0.12);
+      --filter-active-border: rgba(63,159,106,0.35);
+      --filter-active-color: #3f9f6a;
+      --available-border: rgba(240,165,0,0.22);
+      --available-bg: rgba(240,165,0,0.04);
+      /* Scrollbar */
+      --sb-track: #1a1a1d;
+      --sb-thumb: #3a3a3a;
+      --sb-thumb-hover: #4a4a4a;
+      /* Wasted page themed vars */
+      --wasted-section-bg: rgba(63,159,106,0.04);
+      --wasted-section-border: rgba(63,159,106,0.14);
+      --wasted-banner-accent: #3f9f6a;
+      --wasted-badge-bg: rgba(63,159,106,0.10);
+      --wasted-badge-border: rgba(63,159,106,0.20);
+      --wasted-badge-color: #3f9f6a;
+      --wasted-item-hover-border: rgba(63,159,106,0.30);
+    }
+
+    body.light {
+      --bg: #fdf6ec;
+      --surface: #fff8f0;
+      --surface2: #f5ede0;
+      --surface3: #eeddd0;
+      /* Orange primary for light mode — matches login page */
+      --primary: #c8522a;
+      --primary-dark: #a94422;
+      --primary-glow: rgba(200,82,42,0.14);
+      --text: #1e1208;
+      --text-dim: #4a3020;
+      --muted: #8c7060;
+      --border: #e8d8c8;
+      --border-light: #dcc8b4;
+      --shadow: 0 4px 24px rgba(44,26,14,0.08);
+      --role-bg: rgba(200,82,42,0.08);
+      --role-border: rgba(200,82,42,0.22);
+      --role-color: #c8522a;
+      --active-bg: rgba(200,82,42,0.09);
+      --active-border: rgba(200,82,42,0.22);
+      --active-color: #c8522a;
+      --stat-value-color: #c8522a;
+      --badge-bg: rgba(200,82,42,0.08);
+      --badge-border: rgba(200,82,42,0.18);
+      --badge-color: #c8522a;
+      --input-focus-border: #c8522a;
+      --input-focus-shadow: rgba(200,82,42,0.12);
+      --btn-primary-from: #a94422;
+      --btn-primary-to: #c8522a;
+      --topbar-bg: rgba(253,246,236,0.92);
+      --filter-bg: rgba(0,0,0,0.025);
+      --filter-border: rgba(0,0,0,0.07);
+      --filter-active-bg: rgba(200,82,42,0.08);
+      --filter-active-border: rgba(200,82,42,0.32);
+      --filter-active-color: #c8522a;
+      --available-border: rgba(180,120,0,0.20);
+      --available-bg: rgba(180,120,0,0.04);
+      --btn-accept-from: #9a5a00;
+      --btn-accept-to: #c88000;
+      --btn-accept-shadow: rgba(180,120,0,0.18);
+      /* Scrollbar */
+      --sb-track: #ede0d0;
+      --sb-thumb: #c8b8a4;
+      --sb-thumb-hover: #b0a090;
+      /* Wasted page — warm orange accent in light mode */
+      --wasted-section-bg: rgba(200,82,42,0.05);
+      --wasted-section-border: rgba(200,82,42,0.18);
+      --wasted-banner-accent: #c8522a;
+      --wasted-badge-bg: rgba(200,82,42,0.10);
+      --wasted-badge-border: rgba(200,82,42,0.22);
+      --wasted-badge-color: #c8522a;
+      --wasted-item-hover-border: rgba(200,82,42,0.35);
+    }
+
+    /* ── GLOBAL FONT SIZE BASE ────────────────────────── */
+    html { font-size: 14px; }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+
+    /* ── SCROLLBARS ─────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--sb-track); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--sb-thumb); border-radius: 10px; border: 2px solid var(--sb-track); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--sb-thumb-hover); }
+    * { scrollbar-width: auto; scrollbar-color: var(--sb-thumb) var(--sb-track); }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── SIDEBAR ────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 20px 18px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--text); letter-spacing: -0.2px;
+    }
+    .logo-text span { color: var(--primary); }
+
+    .sidebar-role {
+      margin: 14px 16px 6px;
+      padding: 6px 12px;
+      background: var(--role-bg);
+      border: 1px solid var(--role-border);
+      border-radius: 8px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1.8px; text-transform: uppercase;
+      color: var(--role-color);
+      flex-shrink: 0; text-align: center;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 6px 10px;
+      display: flex; flex-direction: column; gap: 2px;
+      overflow-y: scroll;
+      min-height: 0;
+    }
+
+    .sidebar-nav::-webkit-scrollbar { width: 6px; }
+    .sidebar-nav::-webkit-scrollbar-track { background: var(--sb-track); border-radius: 6px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--sb-thumb); border-radius: 6px; border: 1px solid var(--sb-track); }
+    .sidebar-nav::-webkit-scrollbar-thumb:hover { background: var(--sb-thumb-hover); }
+
+    .sidebar-section-label {
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); font-weight: 600;
+      padding: 14px 10px 5px; opacity: 0.55; flex-shrink: 0;
+    }
+
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      text-decoration: none; font-size: 14px; font-weight: 500;
+      color: var(--muted);
+      transition: all 0.18s; cursor: pointer;
+      border: 1px solid transparent; background: none;
+      width: 100%; text-align: left;
+      font-family: 'DM Sans', sans-serif; line-height: 1; flex-shrink: 0;
+    }
+
+    .sidebar-link .nav-icon {
+      width: 16px; height: 16px; flex-shrink: 0;
+      opacity: 0.55; transition: opacity 0.18s;
+    }
+
+    .sidebar-link:hover { background: var(--surface2); color: var(--text); }
+    .sidebar-link:hover .nav-icon { opacity: 0.85; }
+
+    .sidebar-link.active {
+      background: var(--active-bg);
+      color: var(--active-color);
+      border-color: var(--active-border);
+      font-weight: 600;
+    }
+    .sidebar-link.active .nav-icon { opacity: 1; }
+
+    .link-count {
+      margin-left: auto; font-size: 10px; font-weight: 700;
+      background: var(--warning-dim); color: var(--warning);
+      padding: 2px 7px; border-radius: 20px;
+      min-width: 18px; text-align: center;
+    }
+
+    .sidebar-user {
+      flex-shrink: 0;
+      margin: 0 12px 12px;
+      padding: 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .sidebar-user-name { font-size: 14px; font-weight: 600; margin-bottom: 1px; color: var(--text); }
+    .sidebar-user-role { font-size: 12px; color: var(--role-color); margin-bottom: 3px; }
+    .sidebar-user-email { font-size: 12px; color: var(--muted); }
+
+    .btn-logout {
+      margin-top: 10px; width: 100%; padding: 8px;
+      background: none; border: 1px solid var(--border-light); border-radius: 7px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; color: var(--muted); transition: all 0.18s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-logout:hover { border-color: var(--error); color: var(--error); }
+
+    /* ── MAIN AREA ────────────────────────────────── */
+    .main-area {
+      margin-left: var(--sidebar-w);
+      flex: 1; display: flex; flex-direction: column;
+      min-height: 100vh; overflow-y: scroll;
+    }
+
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 32px; border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 40;
+      background: var(--topbar-bg);
+    }
+
+    .topbar-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-weight: 600; line-height: 1.15; color: var(--text);
+    }
+    .topbar-title p { font-size: 14px; color: var(--muted); margin-top: 3px; }
+
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
+
+    /* ── TOPBAR ICON BUTTON (standardized, 38×38) ── */
+    .topbar-icon-btn {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border);
+      background: transparent;
+      border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .topbar-icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    .availability-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--surface2);
+      cursor: pointer; transition: all 0.18s;
+    }
+    .availability-toggle:hover { border-color: var(--primary); }
+
+    .toggle-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--muted); transition: background 0.2s;
+    }
+    .toggle-dot.online { background: var(--success); box-shadow: 0 0 6px var(--success); }
+
+    .toggle-label { font-size: 14px; font-weight: 500; color: var(--muted); }
+    .toggle-label.online { color: var(--success); }
+
+    /* ── CONTENT ────────────────────────────────── */
+    .content { padding: 28px 32px; flex: 1; }
+
+    .page-section { display: none; animation: fadeUp 0.32s ease both; }
+    .page-section.active { display: block; }
+
+    /* ── STAT CARDS ────────────────────────────────── */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow);
+      transition: border-color 0.18s, transform 0.18s; animation: fadeUp 0.5s ease both;
+    }
+    .stat-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+    .stat-card:nth-child(1){animation-delay:.05s;}
+    .stat-card:nth-child(2){animation-delay:.1s;}
+    .stat-card:nth-child(3){animation-delay:.15s;}
+    .stat-card:nth-child(4){animation-delay:.2s;}
+
+    .stat-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+    .stat-value { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--stat-value-color); line-height: 1; margin-bottom: 6px; }
+    .stat-sub { font-size: 12px; color: var(--success); }
+    .stat-sub.warn { color: var(--warning); }
+    .stat-sub.neutral { color: var(--muted); }
+
+    /* ── CARDS ────────────────────────────────── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow);
+      animation: fadeUp 0.5s 0.15s ease both;
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
+    }
+
+    .card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; }
+
+    .card-badge {
+      font-size: 12px; padding: 3px 10px; border-radius: 20px;
+      background: var(--badge-bg); border: 1px solid var(--badge-border);
+      color: var(--badge-color); font-weight: 600;
+    }
+    .card-badge.warn { background: var(--warning-dim); border-color: rgba(240,165,0,0.22); color: var(--warning); }
+
+    .dash-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 20px; align-items: start;
+    }
+
+    /* ── FILTER BAR ────────────────────────────────── */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 12px 14px;
+      background: var(--filter-bg); border: 1px solid var(--filter-border);
+      border-radius: 12px; margin-bottom: 12px; align-items: center;
+    }
+
+    .filter-bar-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-right: 2px; white-space: nowrap; }
+
+    .filter-chip {
+      padding: 4px 11px; border-radius: 20px; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--filter-border);
+      background: transparent; color: var(--muted);
+      font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+    }
+    .filter-chip:hover { border-color: var(--filter-active-border); color: var(--text); }
+    .filter-chip.active { background: var(--filter-active-bg); border-color: var(--filter-active-border); color: var(--filter-active-color); font-weight: 600; }
+    .filter-chip .chip-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .filter-chip .chip-dot.veg { background: #4fc87a; }
+    .filter-chip .chip-dot.nonveg { background: #e8784f; }
+
+    .filter-divider { width: 1px; height: 20px; background: var(--border-light); margin: 0 2px; flex-shrink: 0; }
+
+    .filter-select {
+      padding: 4px 26px 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--filter-border);
+      background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5' fill='none'%3E%3Cpath d='M1 1l3.5 3L8 1' stroke='%237a7068' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+      color: var(--muted); font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s; outline: none; appearance: none; max-width: 160px;
+    }
+    .filter-select:focus, .filter-select:hover { border-color: var(--filter-active-border); color: var(--text); }
+    .filter-select option { background: var(--surface2); color: var(--text); }
+
+    .filter-reset { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; padding: 4px 8px; border-radius: 6px; transition: all 0.15s; white-space: nowrap; }
+    .filter-reset:hover { color: var(--error); }
+
+    .filter-results-count { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: none; align-items: center; gap: 4px; }
+    .filter-results-count b { color: var(--text); }
+
+    .filter-no-results { text-align: center; padding: 24px 20px; color: var(--muted); font-size: 14px; background: var(--filter-bg); border: 1px dashed var(--filter-border); border-radius: 12px; }
+
+    /* ── SECTION DIVIDER ────────────────────────────── */
+    .section-divider { margin: 24px 0 16px; display: flex; align-items: center; gap: 12px; }
+    .section-divider-label { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; white-space: nowrap; color: var(--text); }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+    .sdb-available { background: var(--warning-dim); color: var(--warning); border: 1px solid rgba(240,165,0,0.22); }
+    .sdb-mine { background: var(--badge-bg); color: var(--badge-color); border: 1px solid var(--badge-border); }
+
+    /* ── BANNERS ────────────────────────────────── */
+    .offline-banner, .busy-banner {
+      display: none; padding: 14px 18px; border-radius: 12px; margin-bottom: 18px;
+      font-size: 14px; font-weight: 500; align-items: center; gap: 10px; line-height: 1.5;
+    }
+    .offline-banner { background: var(--error-dim); border: 1px solid rgba(217,64,64,0.22); color: var(--error); }
+    .busy-banner { background: var(--warning-dim); border: 1px solid rgba(240,165,0,0.22); color: var(--warning); }
+    .offline-banner.show, .busy-banner.show { display: flex; }
+    .offline-banner a, .busy-banner a { color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600; }
+
+    /* ── FORMS ────────────────────────────────── */
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+
+    input[type=text], input[type=email], select, textarea {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid var(--border-light); border-radius: 10px;
+      background: var(--surface2); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: var(--text); outline: none;
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.5; }
+    input:focus, select:focus, textarea:focus { border-color: var(--input-focus-border); box-shadow: 0 0 0 3px var(--input-focus-shadow); }
+    select option { background: var(--surface2); color: var(--text); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── PRIMARY BUTTON ────────────────────────────── */
+    .btn-primary {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to));
+      color: #fff; border: none; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: opacity 0.18s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── ASSIGNMENT CARDS ────────────────────────────── */
+    .assignment-card {
+      padding: 16px 18px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 12px;
+      transition: border-color 0.18s, transform 0.18s; animation: fadeUp 0.4s ease both;
+    }
+    .assignment-card:last-child { margin-bottom: 0; }
+    .assignment-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+    .assignment-card.available-card { border-color: var(--available-border); background: var(--available-bg); }
+    .assignment-card.available-card:hover { border-color: rgba(240,165,0,0.40); }
+
+    .assign-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; }
+    .assign-food { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .assign-qty { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+
+    /* ── ROUTE ────────────────────────────────── */
+    .assign-route {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; margin-bottom: 10px;
+    }
+
+    .route-point { padding: 11px 14px; min-width: 0; }
+    .route-point:first-child { border-right: 1px solid var(--border); }
+
+    .route-arrow-col { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; gap: 3px; }
+    .route-arrow-icon { color: var(--primary); display: flex; align-items: center; }
+    .route-arrow-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+    .route-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 4px; }
+    .route-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .route-sub { font-size: 12px; color: var(--muted); line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+
+    .assign-actions { display: flex; gap: 8px; }
+
+    /* ── ACTION BUTTONS ────────────────────────────────── */
+    .btn-accept, .btn-pickup, .btn-deliver {
+      flex: 1; padding: 9px 14px; border: none; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: opacity 0.18s, transform 0.15s; color: #fff;
+    }
+    .btn-accept { background: linear-gradient(135deg, var(--btn-accept-from), var(--btn-accept-to)); box-shadow: 0 2px 10px var(--btn-accept-shadow); }
+    .btn-pickup, .btn-deliver { background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to)); }
+    .btn-accept:hover, .btn-pickup:hover, .btn-deliver:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-accept:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+
+    /* ── CHIPS ────────────────────────────────── */
+    .open-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 20px; background: var(--warning-dim); color: var(--warning); border: 1px solid rgba(240,165,0,0.22); flex-shrink: 0; white-space: nowrap; }
+
+    .time-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+    .time-chip.plenty { background: rgba(79,200,122,0.10); color: #4fc87a; border: 1px solid rgba(79,200,122,0.20); }
+    .time-chip.moderate { background: rgba(240,165,0,0.10); color: var(--warning); border: 1px solid rgba(240,165,0,0.20); }
+    .time-chip.tight { background: rgba(232,120,79,0.12); color: #e8784f; border: 1px solid rgba(232,120,79,0.24); }
+    .time-chip.critical { background: rgba(217,64,64,0.10); color: var(--error); border: 1px solid rgba(217,64,64,0.22); animation: pulseCrit 1.4s ease infinite; }
+    .time-chip.expired-chip { background: rgba(217,64,64,0.08); color: var(--error); border: 1px solid rgba(217,64,64,0.18); opacity: 0.7; }
+
+    @keyframes pulseCrit { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .food-type-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.3px; text-transform: uppercase; }
+    .food-type-tag.veg { background: rgba(79,200,122,0.12); color: #4fc87a; border: 1px solid rgba(79,200,122,0.22); }
+    .food-type-tag.non-veg { background: rgba(232,120,79,0.12); color: #e8784f; border: 1px solid rgba(232,120,79,0.22); }
+    .food-type-tag .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .food-type-tag.veg .dot { background: #4fc87a; }
+    .food-type-tag.non-veg .dot { background: #e8784f; }
+
+    .qty-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--badge-bg); border: 1px solid var(--badge-border); color: var(--badge-color); }
+
+    .cap-tag { padding: 2px 7px; border-radius: 20px; font-weight: 600; font-size: 11px; }
+    .cap-tag.ok { background: var(--success-dim); color: var(--success); border: 1px solid rgba(79,200,122,0.18); }
+    .cap-tag.warn { background: var(--warning-dim); color: var(--warning); border: 1px solid rgba(240,165,0,0.18); }
+    .cap-tag.over { background: var(--error-dim); color: var(--error); border: 1px solid rgba(217,64,64,0.18); }
+
+    /* ── ACTIVE ASSIGN CARD ────────────────────────── */
+    .active-assign-card {
+      padding: 16px 18px; background: var(--surface2);
+      border: 1px solid var(--badge-border); border-radius: 12px;
+      margin-bottom: 10px; animation: fadeUp 0.4s ease both;
+      transition: border-color 0.18s, transform 0.18s;
+    }
+    .active-assign-card:hover { border-color: var(--primary); transform: translateY(-1px); }
+    .active-assign-card:last-child { margin-bottom: 0; }
+
+    /* ── EXPIRED CARD ────────────────────────────────── */
+    .assignment-card.expired-card {
+      border-color: rgba(217,64,64,0.14) !important;
+      background: rgba(217,64,64,0.025) !important;
+      opacity: 0.5; position: relative; overflow: hidden; pointer-events: none;
+    }
+    .expired-overlay { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(217,64,64,0.10); border: 1px solid rgba(217,64,64,0.22); border-radius: 8px; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--error); }
+    .expired-diagonal { position: absolute; top: 12px; right: -26px; background: rgba(217,64,64,0.80); color: #fff; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 34px; transform: rotate(45deg); z-index: 2; }
+
+    /* ── TIGHT TIME WARNING ────────────────────────── */
+    .tight-time-warning { display: flex; align-items: center; gap: 7px; padding: 8px 12px; background: rgba(240,165,0,0.08); border: 1px solid rgba(240,165,0,0.24); border-radius: 8px; margin-top: 8px; font-size: 13px; color: var(--warning); font-weight: 500; }
+    .tight-time-warning b { font-weight: 700; }
+
+    /* ── HISTORY ITEMS ────────────────────────────── */
+    .history-item { display: flex; align-items: center; gap: 11px; padding: 12px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; transition: border-color 0.18s; }
+    .history-item:last-child { margin-bottom: 0; }
+    .history-item:hover { border-color: var(--border-light); }
+
+    .h-icon { font-size: 20px; flex-shrink: 0; }
+    .h-info { flex: 1; min-width: 0; }
+    .h-name { font-weight: 600; font-size: 14px; color: var(--text); }
+    .h-meta { font-size: 13px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .h-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+
+    /* ── STATUS BADGES ────────────────────────────── */
+    .badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+    .b-pending { background: var(--warning-dim); color: var(--warning); }
+    .b-accepted { background: var(--success-dim); color: var(--success); }
+    .b-completed { background: var(--success-dim); color: var(--success); }
+    .b-delivered { background: var(--success-dim); color: var(--success); }
+    .b-progress { background: var(--badge-bg); color: var(--badge-color); }
+    .b-open { background: var(--warning-dim); color: var(--warning); }
+    .b-default { background: var(--surface3); color: var(--muted); }
+
+    /* ── OTP ────────────────────────────────────── */
+    .otp-group { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+    .otp-input {
+      flex: 1; padding: 9px 13px;
+      border: 1.5px solid var(--border-light); border-radius: 9px;
+      background: var(--surface3); font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; color: var(--text); outline: none;
+      letter-spacing: 5px; text-align: center;
+      transition: border 0.18s, box-shadow 0.18s;
+    }
+    .otp-input:focus { border-color: var(--input-focus-border); box-shadow: 0 0 0 3px var(--input-focus-shadow); }
+    .otp-input::placeholder { letter-spacing: normal; font-weight: 400; opacity: 0.5; }
+
+    .btn-verify { padding: 9px 16px; background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to)); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.18s; white-space: nowrap; }
+    .btn-verify:hover { opacity: 0.88; }
+
+    /* ── PROFILE ────────────────────────────────── */
+    .profile-header { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; padding: 20px 22px; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; }
+
+    .profile-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to)); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #fff; font-family: 'Playfair Display', serif; flex-shrink: 0; }
+
+    .profile-avatar-info h2 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 3px; color: var(--text); }
+    .profile-avatar-info p { font-size: 14px; color: var(--muted); }
+
+    .status-badge { margin-left: auto; background: var(--success-dim); border: 1px solid rgba(79,200,122,0.18); border-radius: 10px; padding: 9px 14px; text-align: center; flex-shrink: 0; }
+    .status-badge.offline { background: var(--error-dim); border-color: rgba(217,64,64,0.18); }
+    .status-badge.busy { background: var(--warning-dim); border-color: rgba(240,165,0,0.18); }
+    .status-badge .status-val { font-size: 14px; font-weight: 600; color: var(--success); }
+    .status-badge.offline .status-val { color: var(--error); }
+    .status-badge.busy .status-val { color: var(--warning); }
+    .status-badge .status-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+    .vehicle-capacity-info { margin-top: 7px; padding: 9px 12px; background: var(--badge-bg); border: 1px solid var(--badge-border); border-radius: 8px; font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 7px; }
+    .vehicle-capacity-info b { color: var(--badge-color); }
+
+    .status-warning-box, .status-error-box { display: none; margin-top: 7px; padding: 9px 12px; border-radius: 8px; font-size: 13px; align-items: center; gap: 7px; }
+    .status-warning-box { background: var(--warning-dim); border: 1px solid rgba(240,165,0,0.22); color: var(--warning); }
+    .status-error-box { background: var(--error-dim); border: 1px solid rgba(217,64,64,0.18); color: var(--error); }
+    .status-warning-box.show, .status-error-box.show { display: flex; }
+
+    /* ── IMPACT GRID ────────────────────────────── */
+    .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+
+    .impact-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+
+    .impact-num { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--stat-value-color); line-height: 1; }
+    .impact-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; font-weight: 600; }
+    .impact-sub { font-size: 13px; color: var(--success); margin-top: 4px; }
+
+    /* ══════════════════════════════════════════════════
+       WASTED PAGE
+    ══════════════════════════════════════════════════ */
+    .wasted-banner {
+      padding: 16px 20px; background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--wasted-banner-accent);
+      border-radius: 14px; margin-bottom: 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .wasted-banner-icon { font-size: 26px; flex-shrink: 0; }
+    .wasted-banner-text h3 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--text); margin-bottom: 3px; }
+    .wasted-banner-text p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    .wasted-card-container { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; box-shadow: var(--shadow); animation: fadeUp 0.5s 0.15s ease both; }
+
+    .wasted-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+
+    .wasted-card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--text); }
+
+    .wasted-count-badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--wasted-badge-bg); border: 1px solid var(--wasted-badge-border); color: var(--wasted-badge-color); font-weight: 600; }
+
+    .wasted-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 18px; background: var(--surface2); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 10px; transition: border-color 0.18s, transform 0.18s; animation: fadeUp 0.4s ease both; }
+    .wasted-item:hover { border-color: var(--wasted-item-hover-border); transform: translateY(-1px); }
+    .wasted-item:last-child { margin-bottom: 0; }
+
+    .wasted-icon { font-size: 22px; margin-top: 2px; }
+    .wasted-info { flex: 1; min-width: 0; }
+    .wasted-name { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+    .wasted-meta { font-size: 13px; color: var(--muted); margin-top: 3px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px; line-height: 1.6; }
+
+    .wasted-status-label { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; color: var(--error); background: var(--error-dim); border: 1px solid rgba(217,64,64,0.25); }
+
+    .wasted-explanation { margin-top: 10px; padding: 10px 13px; background: var(--surface3); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .wasted-explanation .why-label { color: var(--error); font-weight: 700; }
+
+    /* ── MODAL ────────────────────────────────── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+
+    .modal { background: var(--surface); border: 1px solid var(--border-light); border-radius: 18px; padding: 32px; width: 420px; max-width: 95vw; box-shadow: 0 32px 80px rgba(0,0,0,0.65); animation: modalIn 0.22s ease; }
+
+    .modal h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 6px; color: var(--text); }
+    .modal > p { color: var(--muted); font-size: 14px; margin-bottom: 18px; line-height: 1.6; }
+
+    .modal-details { background: var(--surface2); border: 1px solid var(--border); border-radius: 11px; padding: 14px 16px; font-size: 14px; line-height: 1.9; color: var(--text); margin-bottom: 16px; }
+
+    .modal-btns { display: flex; gap: 9px; margin-top: 18px; }
+
+    .btn-modal-cancel { flex: 1; padding: 11px; background: none; border: 1px solid var(--border-light); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; color: var(--muted); transition: all 0.18s; }
+    .btn-modal-cancel:hover { border-color: var(--primary); color: var(--primary); }
+
+    .btn-modal-confirm { flex: 1; padding: 11px; background: linear-gradient(135deg, var(--btn-primary-from), var(--btn-primary-to)); color: #fff; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.18s; }
+    .btn-modal-confirm:hover { opacity: 0.9; }
+    .modal-confirm-accept .btn-modal-confirm { background: linear-gradient(135deg, var(--btn-accept-from), var(--btn-accept-to)); }
+
+    .modal-time-warning { display: none; padding: 10px 14px; background: rgba(232,120,79,0.10); border: 1px solid rgba(232,120,79,0.25); border-radius: 9px; font-size: 14px; color: #e8784f; margin-bottom: 12px; align-items: center; gap: 9px; line-height: 1.5; }
+    .modal-time-warning.show { display: flex; }
+
+    /* ── TOAST ────────────────────────────────── */
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 500; z-index: 9998; pointer-events: none; animation: toastIn 0.28s ease; font-family: 'DM Sans', sans-serif; border: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; gap: 7px; }
+    .toast.success { background: #1a3a2a; color: #4fc87a; box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
+    .toast.error { background: #3a1a1a; color: #d94040; box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
+    .toast.info { background: #1a3a2a; color: #4fc87a; box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
+    .toast.warn { background: #2a1e00; color: #f0a500; box-shadow: 0 8px 28px rgba(0,0,0,0.5); }
+
+    body.light .toast.success { background: #d6f0e0; color: #2f7a52; }
+    body.light .toast.error { background: #fde8e8; color: #d94040; }
+    body.light .toast.warn { background: #fff0cc; color: #a06000; }
+
+    /* ── EMPTY STATE ────────────────────────────── */
+    .empty-state { text-align: center; padding: 28px 20px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.28; display: block; }
+
+    /* ── DISABLED MSG ────────────────────────────── */
+    .disabled-msg { font-size: 13px; color: var(--muted); margin-bottom: 8px; padding: 7px 11px; background: var(--surface3); border-radius: 7px; }
+
+    /* ── ANIMATIONS ────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media(max-width:1100px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .dash-grid { grid-template-columns: 1fr; }
+      .impact-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width:700px) {
+      .sidebar { display: none; }
+      .main-area { margin-left: 0; }
+      .content { padding: 18px; }
+      .topbar { padding: 12px 18px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .assign-route { grid-template-columns: 1fr; }
+      .route-point:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .route-arrow-col { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <a href="/" class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="white" opacity="0.9"/>
+          <path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4z" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="logo-text">Food<span>Bridge</span></div>
+    </a>
+
+    <div class="sidebar-role">Volunteer</div>
+
+    <nav class="sidebar-nav">
+      <span class="sidebar-section-label">Menu</span>
+
+      <button class="sidebar-link active" onclick="showSection('dashboard',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <button class="sidebar-link" onclick="showSection('my-assignments',this)" id="navAssignments">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/>
+        </svg>
+        My Assignments
+        <span class="link-count" id="availableCountBadge" style="display:none;">0</span>
+      </button>
+
+      <button class="sidebar-link" onclick="showSection('delivery-history',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Delivery History
+      </button>
+
+      <button class="sidebar-link" id="wastedNavBtn" onclick="showSection('wasted',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+        </svg>
+        Wasted Donations
+        <span class="link-count" id="wastedNavBadge" style="display:none;">0</span>
+      </button>
+
+      <span class="sidebar-section-label">Account</span>
+
+      <button class="sidebar-link" onclick="showSection('profile',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Profile
+      </button>
+
+      <button class="sidebar-link" onclick="showSection('impact-score',this)">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+        </svg>
+        Impact Score
+      </button>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name" id="sidebarName">Loading…</div>
+      <div class="sidebar-user-role">Delivery Volunteer</div>
+      <div class="sidebar-user-email" id="sidebarStatus">Available</div>
+      <button class="btn-logout" onclick="window.location.href='/logout'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN AREA ═══ -->
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title">
+        <h1 id="topbarGreeting">Volunteer Dashboard</h1>
+        <p id="topbarSub">Your active assignments and delivery history</p>
+      </div>
+      <div class="topbar-right">
+        <div class="availability-toggle" id="availToggle" onclick="toggleAvailability()">
+          <div class="toggle-dot online" id="toggleDot"></div>
+          <span class="toggle-label online" id="toggleLabel">Online</span>
+        </div>
+
+        <!-- Theme toggle: shows moon in dark mode, sun in light mode -->
+        <button class="topbar-icon-btn" id="themeToggleBtn" title="Toggle Theme" onclick="toggleTheme()">
+          <!-- Moon icon (visible in dark mode) -->
+          <svg id="themeIconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <!-- Sun icon (visible in light mode) -->
+          <svg id="themeIconSun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+
+        <button class="topbar-icon-btn" title="Refresh" onclick="refreshAll()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      <div id="section-dashboard" class="page-section active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Open for Claiming</div>
+            <div class="stat-value" id="statAvailable">0</div>
+            <div class="stat-sub warn">Waiting for a volunteer</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">In Progress</div>
+            <div class="stat-value" id="statInProgress">0</div>
+            <div class="stat-sub neutral">Active pickups</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Delivered</div>
+            <div class="stat-value" id="statDelivered">0</div>
+            <div class="stat-sub">Total completed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Meals Delivered</div>
+            <div class="stat-value" id="statMeals">0</div>
+            <div class="stat-sub">Estimated impact</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-title">My Active Assignments</div>
+            <span class="card-badge" id="dashActiveBadge">0 active</span>
+          </div>
+          <div id="activeAssignmentsDash">
+            <div class="empty-state"><span class="empty-icon">📦</span>No active assignments. Accept one below!</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;padding:18px 22px;">
+          <div class="card-header" style="margin-bottom:12px;">
+            <div class="card-title">Filter Available Donations</div>
+            <span class="card-badge warn" id="dashFilteredCount">All donations</span>
+          </div>
+          <div class="filter-bar">
+            <span class="filter-bar-label">Type</span>
+            <button class="filter-chip active" id="dash-chip-all" onclick="setDashFoodFilter('all')">All Food</button>
+            <button class="filter-chip" id="dash-chip-veg" onclick="setDashFoodFilter('veg')"><span class="chip-dot veg"></span> Veg Only</button>
+            <button class="filter-chip" id="dash-chip-nonveg" onclick="setDashFoodFilter('nonveg')"><span class="chip-dot nonveg"></span> Non-Veg</button>
+            <div class="filter-divider"></div>
+            <select class="filter-select" id="dashFilterPickup" onchange="applyDashFilters()"><option value="">Pickup Area</option></select>
+            <select class="filter-select" id="dashFilterDrop" onchange="applyDashFilters()"><option value="">Drop Area</option></select>
+            <button class="filter-reset" onclick="resetDashFilters()">✕ Reset</button>
+          </div>
+          <div class="filter-results-count" id="dashFilterResultsCount">
+            Showing <b id="dashFilterNum">0</b> of <b id="dashFilterTotal">0</b> available donations
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Available Donations</div>
+              <span class="card-badge" id="assignBadge">0 items</span>
+            </div>
+            <div id="assignmentListDash">
+              <div class="empty-state"><span class="empty-icon">🍱</span>No open donations right now.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Delivery History</div>
+              <span class="card-badge" id="historyBadge">0 trips</span>
+            </div>
+            <div id="historyListDash">
+              <div class="empty-state"><span class="empty-icon">📭</span>No deliveries yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ MY ASSIGNMENTS ═══ -->
+      <div id="section-my-assignments" class="page-section">
+        <div class="offline-banner" id="offlineBannerAssign">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          You are currently <b>&nbsp;Offline&nbsp;</b>. You cannot view or accept assignments.
+          <a onclick="showSection('profile',document.querySelector('[onclick*=profile]'))">Go to Profile</a> to set your status to Available.
+        </div>
+        <div class="busy-banner" id="busyBannerAssign">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          You are currently <b>&nbsp;Busy&nbsp;</b>. Complete your active delivery before accepting new ones.
+          <a onclick="showSection('profile',document.querySelector('[onclick*=profile]'))">Update status</a> when done.
+        </div>
+
+        <div class="section-divider">
+          <div class="section-divider-label">My Active Assignments</div>
+          <div class="section-divider-line"></div>
+          <span class="section-divider-badge sdb-mine" id="mineBadgeCount">0 active</span>
+        </div>
+        <div id="assignmentListFull">
+          <div class="empty-state"><span class="empty-icon">📋</span>You haven't accepted any assignments yet.</div>
+        </div>
+
+        <div id="assignFiltersSection" style="margin-top:32px;">
+          <div class="section-divider">
+            <div class="section-divider-label">Available Donations</div>
+            <div class="section-divider-line"></div>
+            <span class="section-divider-badge sdb-available" id="availBadgeCount">0 open</span>
+          </div>
+
+          <div class="filter-bar">
+            <span class="filter-bar-label">Filter</span>
+            <button class="filter-chip active" id="chip-all-food" onclick="setFoodFilter('all')">All Food</button>
+            <button class="filter-chip" id="chip-veg" onclick="setFoodFilter('veg')"><span class="chip-dot veg"></span> Veg Only</button>
+            <button class="filter-chip" id="chip-nonveg" onclick="setFoodFilter('nonveg')"><span class="chip-dot nonveg"></span> Non-Veg</button>
+            <div class="filter-divider"></div>
+            <select class="filter-select" id="filterPickupArea" onchange="applyFilters()" title="Filter by Pickup Area"><option value="">Any Pickup Area</option></select>
+            <select class="filter-select" id="filterDropArea" onchange="applyFilters()" title="Filter by Drop Area"><option value="">Any Drop Area</option></select>
+            <div class="filter-divider"></div>
+            <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;">
+              <span style="font-size:13px;color:var(--muted);white-space:nowrap;">Max Qty:</span>
+              <input type="range" style="-webkit-appearance:none;appearance:none;width:72px;height:3px;border-radius:2px;background:var(--border-light);outline:none;cursor:pointer;" id="filterQtyRange" min="1" max="500" value="500" oninput="updateQtyFilter(this.value)">
+              <span style="font-size:13px;font-weight:700;color:var(--text);min-width:32px;text-align:center;background:var(--filter-active-bg);border:1px solid var(--filter-active-border);border-radius:7px;padding:2px 6px;" id="filterQtyVal">Any</span>
+            </div>
+            <button class="filter-reset" onclick="resetFilters()">✕ Reset</button>
+          </div>
+
+          <div class="filter-results-count" id="filterResultsCount">
+            Showing <b id="filterResultsNum">0</b> of <b id="filterResultsTotal">0</b> available donations
+          </div>
+
+          <div id="availableListFull">
+            <div class="empty-state"><span class="empty-icon">🍱</span>No open donations right now. Check back soon!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DELIVERY HISTORY ═══ -->
+      <div id="section-delivery-history" class="page-section">
+        <div id="historyListFull">
+          <div class="empty-state"><span class="empty-icon">📭</span>No deliveries yet</div>
+        </div>
+      </div>
+
+      <!-- ═══ WASTED DONATIONS ═══ -->
+      <div id="section-wasted" class="page-section">
+        <div class="wasted-banner">
+          <div class="wasted-banner-icon">⚠️</div>
+          <div class="wasted-banner-text">
+            <h3>Wasted Donations</h3>
+            <p>These donations expired before any volunteer could collect them. Consider accepting open donations quickly to prevent future waste.</p>
+          </div>
+        </div>
+        <div class="wasted-card-container">
+          <div class="wasted-card-header">
+            <div class="wasted-card-title">Expired &amp; Unclaimed</div>
+            <span class="wasted-count-badge" id="wastedCount">0 donations</span>
+          </div>
+          <div id="wastedList">
+            <div class="empty-state"><span class="empty-icon">✅</span>No wasted donations right now!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PROFILE ═══ -->
+      <div id="section-profile" class="page-section">
+        <div class="profile-header">
+          <div class="profile-avatar" id="volAvatarInitial">V</div>
+          <div class="profile-avatar-info">
+            <h2 id="volDisplayName">Loading…</h2>
+            <p id="volDisplayContact">—</p>
+          </div>
+          <div class="status-badge" id="volStatusBadge">
+            <div class="status-val" id="volStatusVal">Available</div>
+            <div class="status-label">Status</div>
+          </div>
+        </div>
+        <div class="card" style="max-width:540px;">
+          <div class="card-header">
+            <div class="card-title">Edit Profile</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" id="vol_name" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Number</label>
+              <input type="text" id="vol_contact" placeholder="Phone number">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Vehicle Type</label>
+              <select id="vol_vehicle" onchange="onVehicleChange(this.value)">
+                <option value="None">None (On Foot)</option>
+                <option value="Bicycle">Bicycle</option>
+                <option value="Motorcycle">Motorcycle</option>
+                <option value="Car">Car</option>
+                <option value="Van">Van</option>
+              </select>
+              <div class="vehicle-capacity-info" id="vehicleCapacityInfo">
+                <span id="vehicleCapacityText">On foot — suitable for small quantities up to <b>10 servings</b></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Availability Status</label>
+              <select id="vol_availability" onchange="onAvailabilityChange(this.value)">
+                <option value="Available">Available</option>
+                <option value="Busy">Busy</option>
+                <option value="Offline">Offline</option>
+              </select>
+              <div class="status-warning-box" id="statusWarnBox">
+                <span>Setting to <b>Busy</b> will hide all open assignments until you're Available again.</span>
+              </div>
+              <div class="status-error-box" id="statusErrorBox">
+                <span>Setting to <b>Offline</b> will mark you as unavailable. You won't receive any new tasks.</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveVolProfile()">Save Profile</button>
+        </div>
+      </div>
+
+      <!-- ═══ IMPACT SCORE ═══ -->
+      <div id="section-impact-score" class="page-section">
+        <div class="impact-grid">
+          <div class="impact-card">
+            <div class="impact-num" id="impactDelivered">0</div>
+            <div class="impact-label">Deliveries Completed</div>
+            <div class="impact-sub">All time</div>
+          </div>
+          <div class="impact-card">
+            <div class="impact-num" id="impactMeals">0</div>
+            <div class="impact-label">Meals Delivered</div>
+            <div class="impact-sub">Estimated impact</div>
+          </div>
+          <div class="impact-card">
+            <div class="impact-num" id="impactTotal">0</div>
+            <div class="impact-label">Total Assignments</div>
+            <div class="impact-sub">All received</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Deliveries</div>
+          </div>
+          <div id="impactHistoryList">
+            <div class="empty-state"><span class="empty-icon">🏆</span>Complete deliveries to build your score!</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-area -->
+
+  <!-- ═══ OTP MODAL ═══ -->
+  <div class="modal-overlay" id="otpModal">
+    <div class="modal">
+      <h2>Verify Delivery OTP</h2>
+      <p>Ask the NGO recipient for the OTP to confirm successful delivery.</p>
+      <div class="modal-details" id="otpDetails"></div>
+      <div class="otp-group">
+        <input type="text" class="otp-input" id="otpInput" placeholder="Enter OTP" maxlength="6">
+        <button class="btn-verify" onclick="verifyOtp()">Verify →</button>
+      </div>
+      <div class="modal-btns" style="margin-top:14px;">
+        <button class="btn-modal-cancel" onclick="closeModal('otpModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ACCEPT MODAL ═══ -->
+  <div class="modal-overlay" id="acceptModal">
+    <div class="modal modal-confirm-accept">
+      <h2>Accept Assignment?</h2>
+      <p>You'll be assigned this pickup. An OTP will be generated. Head to the donor and deliver to the NGO.</p>
+      <div class="modal-time-warning" id="modalTimeWarning">
+        <span style="font-size:17px;flex-shrink:0;">⏳</span>
+        <span id="modalTimeWarningText"></span>
+      </div>
+      <div class="modal-details" id="acceptDetails"></div>
+      <div class="modal-btns">
+        <button class="btn-modal-cancel" onclick="closeModal('acceptModal')">Cancel</button>
+        <button class="btn-modal-confirm" id="acceptConfirmBtn" onclick="confirmAcceptAssignment()">Accept &amp; Claim →</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BASE = "";
+    let isOnline = true;
+    let currentDeliveryPickupId = null;
+    let pendingAcceptPickupId = null;
+    let volunteerStatus = "Available";
+    let volunteerVehicle = "None";
+    let filterFood = "all";
+    let filterPickupArea = "";
+    let filterDropArea = "";
+    let filterMaxQty = 500;
+    let allAvailableData = [];
+    let dashFilterFood = "all";
+    let dashFilterPickup = "";
+    let dashFilterDrop = "";
+    let allDashData = [];
+
+    const MIN_DELIVERY_MINUTES = 30;
+    const TIGHT_THRESHOLD_MINUTES = 45;
+
+    // ── EXPIRY HELPERS ──────────────────────────────────────────────────────
+    function parseExpiryDateTime(p) {
+      if (!p || !p.time) return null;
+      const timeStr = String(p.time).substring(0, 8);
+      const dateStr = p.date_of_donation
+        ? String(p.date_of_donation).substring(0, 10)
+        : new Date().toISOString().substring(0, 10);
+      const dt = new Date(`${dateStr}T${timeStr}`);
+      return isNaN(dt.getTime()) ? null : dt;
+    }
+    function getMinutesRemaining(p) {
+      const expiry = parseExpiryDateTime(p);
+      if (!expiry) return Infinity;
+      return (expiry.getTime() - Date.now()) / 60000;
+    }
+    function isExpired(p) { return getMinutesRemaining(p) <= 0; }
+    function canDeliverInTime(p) { return getMinutesRemaining(p) >= MIN_DELIVERY_MINUTES; }
+    function isTightTime(p) { const m = getMinutesRemaining(p); return m >= MIN_DELIVERY_MINUTES && m < TIGHT_THRESHOLD_MINUTES; }
+    function formatTimeRemaining(mins) {
+      if (mins <= 0) return "Expired";
+      if (!isFinite(mins)) return null;
+      const h = Math.floor(mins / 60), m = Math.round(mins % 60);
+      return h > 0 ? `${h}h ${m}m` : `${m}m`;
+    }
+    function timeRemainingChip(p) {
+      const mins = getMinutesRemaining(p);
+      if (!isFinite(mins)) return "";
+      if (mins <= 0) return `<span class="time-chip expired-chip">⌛ Expired</span>`;
+      const label = formatTimeRemaining(mins);
+      if (mins < MIN_DELIVERY_MINUTES) return `<span class="time-chip critical">${label} left</span>`;
+      if (mins < TIGHT_THRESHOLD_MINUTES) return `<span class="time-chip tight">${label} left</span>`;
+      if (mins < 120) return `<span class="time-chip moderate">${label} left</span>`;
+      return `<span class="time-chip plenty">${label} left</span>`;
+    }
+
+    // ── PUNE LOCATIONS ──────────────────────────────────────────────────────
+    const PUNE_LOCATIONS = [
+      "Aundh","Baner","Balewadi","Kothrud","Deccan Gymkhana","Shivajinagar","Karve Nagar","Warje",
+      "Dhankawadi","Sahakarnagar","Bibwewadi","Katraj","Kondhwa","Wanowrie","Hadapsar","Magarpatta",
+      "Kharadi","Viman Nagar","Kalyani Nagar","Koregaon Park","Boat Club Road","Camp (Cantonment)",
+      "Swargate","Laxmi Road","Kasba Peth","Budhwar Peth","Rasta Peth","Nana Peth","Mandai",
+      "Parvati","Erandwane","Model Colony","Bavdhan","Sus Road","Pashan","Sus","Mahalunge","Wakad",
+      "Pimple Saudagar","Pimple Nilakh","Pimple Gurav","Rahatani","Akurdi","Chinchwad","Pimpri",
+      "Bhosari","Moshi","Charholi","Wagholi","Lohegaon","Dhanori","Vishrantwadi","Alandi Road",
+      "Yerawada","Nagar Road","Mundhwa","Manjri","Undri","Pisoli","Ambegaon","Narhe","Nanded City",
+      "Hingne Khurd","Sinhagad Road","Kirkee","Bopodi","Shastri Nagar","Sangvi","Vadgaon Sheri",
+      "Sopan Baug","Salisbury Park","Fatima Nagar","NIBM Road","Mohammadwadi","Fursungi","Chakan",
+      "Rajgurunagar","Shirwal","Saswad","Jejuri","Daund","Indapur","Baramati","Pune Station","Khadki"
+    ];
+
+    const VEHICLE_CAPACITY = {
+      "None":       { max: 10,  label: "On foot — suitable for small quantities up to <b>10 servings</b>" },
+      "Bicycle":    { max: 30,  label: "Bicycle — recommended for up to <b>30 servings / 5 kg</b>" },
+      "Motorcycle": { max: 80,  label: "Motorcycle — can carry up to <b>80 servings / 15 kg</b>" },
+      "Car":        { max: 150, label: "Car — can carry up to <b>150 servings / 30 kg</b>" },
+      "Van":        { max: 500, label: "Van — high capacity, suitable for <b>bulk / large donations</b>" },
+    };
+
+    const NON_VEG_KEYWORDS = [
+      "chicken","mutton","fish","prawn","shrimp","egg","eggs","meat","beef","pork","biryani","keema",
+      "nihari","haleem","seekh","tandoori chicken","butter chicken","non-veg","nonveg","non veg",
+      "lamb","goat","seafood","crab","lobster","tuna","salmon","sardine","bacon","sausage","turkey",
+      "duck","quail","liver","kidney"
+    ];
+
+    function detectFoodType(foodName) {
+      if (!foodName) return "veg";
+      const lower = foodName.toLowerCase();
+      for (const kw of NON_VEG_KEYWORDS) if (lower.includes(kw)) return "non-veg";
+      return "veg";
+    }
+
+    function foodTypeTag(foodName) {
+      const type = detectFoodType(foodName || "");
+      return `<span class="food-type-tag ${type === "veg" ? "veg" : "non-veg"}"><span class="dot"></span>${type === "veg" ? "Veg" : "Non-Veg"}</span>`;
+    }
+
+    function capacityTag(qty) {
+      const cap = VEHICLE_CAPACITY[volunteerVehicle] || VEHICLE_CAPACITY["None"];
+      if (qty <= cap.max) return `<span class="cap-tag ok">Within capacity</span>`;
+      if (qty <= cap.max * 1.5) return `<span class="cap-tag warn">Near limit</span>`;
+      return `<span class="cap-tag over">Exceeds capacity</span>`;
+    }
+
+    function extractArea(address) {
+      if (!address) return "";
+      return (address.split(/[,\n]/)[0] || "").trim();
+    }
+
+    function buildPuneOptions(pickupSelId, dropSelId, dataArr) {
+      const fromData = new Set();
+      if (dataArr && dataArr.length) {
+        dataArr.forEach(p => {
+          const pa = extractArea(p.donor_address), da = extractArea(p.ngo_address);
+          if (pa) fromData.add(pa);
+          if (da) fromData.add(da);
+        });
+      }
+      const combined = [...new Set([...PUNE_LOCATIONS, ...fromData])].sort();
+      const pickupSel = document.getElementById(pickupSelId);
+      const dropSel = document.getElementById(dropSelId);
+      if (!pickupSel || !dropSel) return;
+      const curPickup = pickupSel.value, curDrop = dropSel.value;
+      pickupSel.innerHTML = '<option value="">Any Pickup Area</option>';
+      dropSel.innerHTML = '<option value="">Any Drop Area</option>';
+      combined.forEach(area => {
+        pickupSel.insertAdjacentHTML('beforeend', `<option value="${area}">${area}</option>`);
+        dropSel.insertAdjacentHTML('beforeend', `<option value="${area}">${area}</option>`);
+      });
+      if (curPickup) pickupSel.value = curPickup;
+      if (curDrop) dropSel.value = curDrop;
+    }
+
+    // ── ROUTE HTML ──────────────────────────────────────────────────────────
+    function routeHtml(p) {
+      return `
+        <div class="assign-route">
+          <div class="route-point">
+            <div class="route-label">Pickup From</div>
+            <div class="route-name">${escHtml(p.donor_name || "Donor")}</div>
+            <div class="route-sub">${escHtml(p.donor_address || "Address not available")}</div>
+            ${p.donor_contact ? `<div class="route-sub" style="margin-top:3px;">${escHtml(p.donor_contact)}</div>` : ""}
+          </div>
+          <div class="route-arrow-col">
+            <div class="route-arrow-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="route-arrow-label">deliver</div>
+          </div>
+          <div class="route-point">
+            <div class="route-label">Deliver To</div>
+            <div class="route-name">${escHtml(p.ngo_name || "NGO")}</div>
+            <div class="route-sub">${escHtml(p.ngo_address || "Address not available")}</div>
+            ${p.ngo_contact ? `<div class="route-sub" style="margin-top:3px;">${escHtml(p.ngo_contact)}</div>` : ""}
+          </div>
+        </div>`;
+    }
+
+    // ── DASHBOARD FILTER CONTROLS ────────────────────────────────────────────
+    function setDashFoodFilter(type) {
+      dashFilterFood = type;
+      document.getElementById("dash-chip-all").classList.toggle("active", type === "all");
+      document.getElementById("dash-chip-veg").classList.toggle("active", type === "veg");
+      document.getElementById("dash-chip-nonveg").classList.toggle("active", type === "nonveg");
+      applyDashFilters();
+    }
+    function applyDashFilters() {
+      dashFilterPickup = document.getElementById("dashFilterPickup").value;
+      dashFilterDrop = document.getElementById("dashFilterDrop").value;
+      let filtered = allDashData.filter(p => {
+        if (dashFilterFood !== "all") {
+          const ft = detectFoodType(p.food_type || "");
+          if (dashFilterFood === "veg" && ft !== "veg") return false;
+          if (dashFilterFood === "nonveg" && ft !== "non-veg") return false;
+        }
+        if (dashFilterPickup && !extractArea(p.donor_address).toLowerCase().includes(dashFilterPickup.toLowerCase())) return false;
+        if (dashFilterDrop && !extractArea(p.ngo_address).toLowerCase().includes(dashFilterDrop.toLowerCase())) return false;
+        return true;
+      });
+      const countEl = document.getElementById("dashFilterResultsCount");
+      const badge = document.getElementById("dashFilteredCount");
+      if (allDashData.length > 0) {
+        countEl.style.display = "flex";
+        document.getElementById("dashFilterNum").textContent = filtered.length;
+        document.getElementById("dashFilterTotal").textContent = allDashData.length;
+        if (badge) badge.textContent = `${filtered.length} of ${allDashData.length} shown`;
+      } else {
+        countEl.style.display = "none";
+        if (badge) badge.textContent = "All donations";
+      }
+      renderDashAssignments(filtered);
+    }
+    function resetDashFilters() {
+      dashFilterFood = "all"; dashFilterPickup = ""; dashFilterDrop = "";
+      document.getElementById("dash-chip-all").classList.add("active");
+      document.getElementById("dash-chip-veg").classList.remove("active");
+      document.getElementById("dash-chip-nonveg").classList.remove("active");
+      document.getElementById("dashFilterPickup").value = "";
+      document.getElementById("dashFilterDrop").value = "";
+      applyDashFilters();
+    }
+
+    // ── MY ASSIGNMENTS FILTER CONTROLS ──────────────────────────────────────
+    function setFoodFilter(type) {
+      filterFood = type;
+      document.getElementById("chip-all-food").classList.toggle("active", type === "all");
+      document.getElementById("chip-veg").classList.toggle("active", type === "veg");
+      document.getElementById("chip-nonveg").classList.toggle("active", type === "nonveg");
+      applyFilters();
+    }
+    function updateQtyFilter(val) {
+      filterMaxQty = parseInt(val);
+      const cap = VEHICLE_CAPACITY[volunteerVehicle] || VEHICLE_CAPACITY["None"];
+      document.getElementById("filterQtyVal").textContent =
+        filterMaxQty >= 500 ? "Any" : filterMaxQty + (filterMaxQty === cap.max ? " (cap)" : "");
+      applyFilters();
+    }
+    function resetFilters() {
+      filterFood = "all"; filterPickupArea = ""; filterDropArea = ""; filterMaxQty = 500;
+      document.getElementById("chip-all-food").classList.add("active");
+      document.getElementById("chip-veg").classList.remove("active");
+      document.getElementById("chip-nonveg").classList.remove("active");
+      document.getElementById("filterPickupArea").value = "";
+      document.getElementById("filterDropArea").value = "";
+      document.getElementById("filterQtyRange").value = 500;
+      document.getElementById("filterQtyVal").textContent = "Any";
+      applyFilters();
+    }
+    function applyFilters() {
+      filterPickupArea = document.getElementById("filterPickupArea").value;
+      filterDropArea = document.getElementById("filterDropArea").value;
+      let filtered = allAvailableData.filter(p => {
+        if (filterFood !== "all") {
+          const ft = detectFoodType(p.food_type || "");
+          if (filterFood === "veg" && ft !== "veg") return false;
+          if (filterFood === "nonveg" && ft !== "non-veg") return false;
+        }
+        if (filterPickupArea && !extractArea(p.donor_address).toLowerCase().includes(filterPickupArea.toLowerCase())) return false;
+        if (filterDropArea && !extractArea(p.ngo_address).toLowerCase().includes(filterDropArea.toLowerCase())) return false;
+        if (filterMaxQty < 500 && (p.quantity || 0) > filterMaxQty) return false;
+        return true;
+      });
+      const countEl = document.getElementById("filterResultsCount");
+      if (allAvailableData.length > 0) {
+        countEl.style.display = "flex";
+        document.getElementById("filterResultsNum").textContent = filtered.length;
+        document.getElementById("filterResultsTotal").textContent = allAvailableData.length;
+      } else { countEl.style.display = "none"; }
+      const liveCount = filtered.filter(p => !isExpired(p)).length;
+      const avBadge = document.getElementById("availBadgeCount");
+      if (avBadge) avBadge.textContent = liveCount + " open";
+      const avEl = document.getElementById("availableListFull");
+      if (!avEl) return;
+      if (filtered.length === 0) {
+        avEl.innerHTML = `<div class="filter-no-results">${allAvailableData.length === 0 ? "No open donations right now. Check back soon!" : "No donations match your filters. <a href='#' onclick='resetFilters();return false;' style='color:var(--primary);'>Reset filters</a>"}</div>`;
+      } else {
+        avEl.innerHTML = filtered.map((p, i) => renderAvailableCard(p, i)).join("");
+      }
+    }
+
+    // ── THEME ────────────────────────────────────────────────────────────────
+    function toggleTheme() {
+      document.body.classList.toggle("light");
+      const isLight = document.body.classList.contains("light");
+      localStorage.setItem("fb_theme", isLight ? "light" : "dark");
+      updateThemeIcon(isLight);
+    }
+    function updateThemeIcon(isLight) {
+      document.getElementById("themeIconMoon").style.display = isLight ? "none" : "block";
+      document.getElementById("themeIconSun").style.display = isLight ? "block" : "none";
+    }
+    (function(){
+      const isLight = localStorage.getItem("fb_theme") === "light";
+      if (isLight) document.body.classList.add("light");
+      // Run after DOM is ready
+      document.addEventListener("DOMContentLoaded", () => updateThemeIcon(isLight));
+    })();
+
+    // ── TOAST ────────────────────────────────────────────────────────────────
+    function showToast(msg, type = "success") {
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3200);
+    }
+
+    // ── HELPERS ──────────────────────────────────────────────────────────────
+    function statusBadge(status) {
+      const map = { "Pending":"b-pending","Accepted":"b-accepted","In Progress":"b-progress","Completed":"b-completed","Delivered":"b-delivered","Open":"b-open" };
+      return `<span class="badge ${map[status] || 'b-default'}">${status || "—"}</span>`;
+    }
+    function escHtml(s) {
+      if (s === null || s === undefined) return "—";
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+    }
+    function safeText(val, fallback) {
+      if (val === null || val === undefined || val === "" || val === "undefined" || val === "null") return fallback || "—";
+      return val;
+    }
+
+    // ── SECTION NAV ──────────────────────────────────────────────────────────
+    function showSection(name, el) {
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      const sec = document.getElementById('section-' + name);
+      if (sec) sec.classList.add('active');
+      if (el) el.classList.add('active');
+      const firstName = (document.getElementById('sidebarName').textContent || "Volunteer").split(' ')[0] || "Volunteer";
+      const titles = {
+        'dashboard':        [`Welcome back, ${firstName}`, 'Your active assignments and delivery history'],
+        'my-assignments':   ['My Assignments', 'Available donations to claim and your active pickups'],
+        'delivery-history': ['Delivery History', 'Your completed delivery record'],
+        'wasted':           ['Wasted Donations', 'Expired donations that went unclaimed'],
+        'profile':          ['My Profile', 'Manage your volunteer account'],
+        'impact-score':     ['Impact Score', 'Your contribution to the community'],
+      };
+      const [h1, sub] = titles[name] || ['Dashboard', ''];
+      document.getElementById('topbarGreeting').textContent = h1;
+      document.getElementById('topbarSub').textContent = sub;
+      if (name === 'my-assignments') loadAssignmentsFull();
+      if (name === 'delivery-history') loadHistoryFull();
+      if (name === 'profile') loadVolProfile();
+      if (name === 'impact-score') loadImpactScore();
+      if (name === 'wasted') loadWastedDonations();
+      window.scrollTo(0, 0);
+    }
+
+    // ── AVAILABILITY TOGGLE ──────────────────────────────────────────────────
+    function toggleAvailability() {
+      isOnline = !isOnline;
+      const dot = document.getElementById("toggleDot"), label = document.getElementById("toggleLabel");
+      dot.classList.toggle("online", isOnline);
+      label.classList.toggle("online", isOnline);
+      label.textContent = isOnline ? "Online" : "Offline";
+      showToast(isOnline ? "You're online! Donations are visible." : "You're offline.", isOnline ? "success" : "info");
+    }
+
+    // ── VEHICLE CHANGE ───────────────────────────────────────────────────────
+    function onVehicleChange(val) {
+      volunteerVehicle = val;
+      const info = VEHICLE_CAPACITY[val] || VEHICLE_CAPACITY["None"];
+      document.getElementById("vehicleCapacityInfo").innerHTML = `<span id="vehicleCapacityText">${info.label}</span>`;
+      const slider = document.getElementById("filterQtyRange");
+      if (slider) { slider.max = Math.max(info.max, 500); slider.value = info.max < 500 ? info.max : 500; updateQtyFilter(slider.value); }
+    }
+    function onAvailabilityChange(val) {
+      document.getElementById("statusWarnBox").classList.toggle("show", val === "Busy");
+      document.getElementById("statusErrorBox").classList.toggle("show", val === "Offline");
+    }
+
+    // ── STATUS VISIBILITY SYNC ───────────────────────────────────────────────
+    function updateStatusVisibility() {
+      const isAvail = volunteerStatus === "Available";
+      const isBusy = volunteerStatus === "Busy";
+      const isOffline = volunteerStatus === "Offline";
+      const dot = document.getElementById("toggleDot");
+      const label = document.getElementById("toggleLabel");
+      if (isAvail) { dot.classList.add("online"); label.classList.add("online"); label.textContent = "Online"; }
+      else if (isBusy) { dot.classList.remove("online"); label.classList.remove("online"); label.textContent = "Busy"; }
+      else { dot.classList.remove("online"); label.classList.remove("online"); label.textContent = "Offline"; }
+      document.getElementById("sidebarStatus").textContent = volunteerStatus;
+      const offlineBanner = document.getElementById("offlineBannerAssign");
+      const busyBanner = document.getElementById("busyBannerAssign");
+      const filterSection = document.getElementById("assignFiltersSection");
+      if (offlineBanner) offlineBanner.classList.toggle("show", isOffline);
+      if (busyBanner) busyBanner.classList.toggle("show", isBusy);
+      if (filterSection) { filterSection.style.opacity = isAvail ? "1" : "0.4"; filterSection.style.pointerEvents = isAvail ? "auto" : "none"; }
+    }
+
+    // ── LOAD ME ──────────────────────────────────────────────────────────────
+    async function loadMe() {
+      try {
+        const res = await fetch(`${BASE}/api/me`, { credentials: "include" });
+        const data = await res.json();
+        if (data.error) { window.location.href = "/login"; return; }
+        const name = safeText(data.user_name, "Volunteer");
+        document.getElementById("sidebarName").textContent = name;
+        const firstName = name.split(" ")[0] || "Volunteer";
+        document.getElementById("topbarGreeting").textContent = `Welcome back, ${firstName}`;
+        const avatar = document.getElementById("volAvatarInitial");
+        if (avatar) avatar.textContent = name[0].toUpperCase();
+      } catch (e) { console.error(e); }
+    }
+
+    // ── LOAD STATS ───────────────────────────────────────────────────────────
+    async function loadStats() {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/stats`, { credentials: "include" });
+        const data = await res.json();
+        if (!data.success) return;
+        const s = data.stats;
+        document.getElementById("statInProgress").textContent = s.in_progress ?? 0;
+        document.getElementById("statDelivered").textContent = s.delivered ?? 0;
+        document.getElementById("statMeals").textContent = (s.delivered ?? 0) * 10;
+      } catch (e) { console.error(e); }
+    }
+
+    // ── RENDER: available card ────────────────────────────────────────────────
+    function renderAvailableCard(p, i) {
+      const expired = isExpired(p);
+      const canDeliver = canDeliverInTime(p);
+      const tight = isTightTime(p);
+      const qty = p.quantity ?? 0;
+      const foodType = safeText(p.food_type, "Unknown food");
+      const timeDisplay = safeText(p.time, null);
+      const capTag = capacityTag(qty);
+      const timeChip = timeRemainingChip(p);
+      const isOfflineV = volunteerStatus === "Offline";
+      const isBusyV = volunteerStatus === "Busy";
+      const canAccept = volunteerStatus === "Available" && !expired && canDeliver;
+
+      if (expired) {
+        return `
+          <div class="assignment-card expired-card" style="animation-delay:${i * 0.07}s">
+            <div class="expired-diagonal">EXPIRED</div>
+            <div class="assign-header">
+              <div>
+                <div class="assign-food"><s>${escHtml(foodType)}</s> ${foodTypeTag(foodType)}</div>
+                <div class="assign-qty"><span class="qty-indicator">${qty} servings</span>${timeChip}</div>
+              </div>
+              <span style="font-size:12px;color:var(--error);font-weight:600;">Expired</span>
+            </div>
+            ${routeHtml(p)}
+            <div class="expired-overlay">This food has expired — no longer available for delivery</div>
+          </div>`;
+      }
+
+      if (!canDeliver) {
+        const minsLeft = Math.max(0, Math.round(getMinutesRemaining(p)));
+        return `
+          <div class="assignment-card available-card" style="animation-delay:${i * 0.07}s;opacity:0.65;pointer-events:none;">
+            <div class="assign-header">
+              <div>
+                <div class="assign-food">${escHtml(foodType)} ${foodTypeTag(foodType)}</div>
+                <div class="assign-qty"><span class="qty-indicator">${qty} servings</span>${capTag}${timeChip}</div>
+              </div>
+              <span class="open-chip">Open</span>
+            </div>
+            ${routeHtml(p)}
+            <div class="tight-time-warning" style="background:rgba(217,64,64,0.07);border-color:rgba(217,64,64,0.18);color:var(--error);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Only <b>${minsLeft} min</b> remaining — not enough time (minimum ${MIN_DELIVERY_MINUTES} min needed).
+            </div>
+          </div>`;
+      }
+
+      let disabledMsg = "";
+      if (isOfflineV) disabledMsg = "You're Offline — update your status to Available to accept.";
+      else if (isBusyV) disabledMsg = "You're Busy — complete your current delivery first.";
+
+      const tightWarning = tight ? `
+        <div class="tight-time-warning">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Only <b>${Math.round(getMinutesRemaining(p))} min</b> left before expiry — accept quickly!
+        </div>` : "";
+
+      const minsRem = Math.round(getMinutesRemaining(p));
+
+      return `
+        <div class="assignment-card available-card" style="animation-delay:${i * 0.07}s">
+          <div class="assign-header">
+            <div>
+              <div class="assign-food">${escHtml(foodType)} ${foodTypeTag(foodType)}</div>
+              <div class="assign-qty">
+                <span class="qty-indicator">${qty} servings</span>
+                ${capTag}${timeChip}
+                ${timeDisplay ? `<span style="color:var(--muted);">· ${escHtml(timeDisplay)}</span>` : ""}
+              </div>
+            </div>
+            <span class="open-chip">Open</span>
+          </div>
+          ${routeHtml(p)}
+          ${tightWarning}
+          ${!canAccept && disabledMsg ? `<div class="disabled-msg">${escHtml(disabledMsg)}</div>` : ""}
+          <div class="assign-actions">
+            <button class="btn-accept" ${canAccept ? "" : "disabled"}
+              onclick="${canAccept ? `openAcceptModal(${p.pickup_id}, '${escHtml(foodType)}', '${escHtml(p.donor_name || "Donor")}', '${escHtml(p.ngo_name || "NGO")}', ${minsRem})` : ""}">
+              Accept This Assignment
+            </button>
+          </div>
+        </div>`;
+    }
+
+    // ── RENDER: my active assignment card ────────────────────────────────────
+    function renderMyAssignment(a, i, compact) {
+      const isPickedUp = (a.status || "").trim() === "In Progress";
+      const foodType = safeText(a.food_type, "Unknown food");
+      const qty = a.quantity ?? 0;
+      const timeDisplay = safeText(a.time, null);
+      return `
+        <div class="${compact ? 'active-assign-card' : 'assignment-card'}" style="animation-delay:${i * 0.07}s">
+          <div class="assign-header">
+            <div>
+              <div class="assign-food">${escHtml(foodType)} ${foodTypeTag(foodType)}</div>
+              <div class="assign-qty">
+                ${qty} servings
+                ${timeDisplay ? `<span style="color:var(--muted);">· ${escHtml(timeDisplay)}</span>` : ""}
+              </div>
+            </div>
+            ${statusBadge(a.status || "Pending")}
+          </div>
+          ${routeHtml(a)}
+          ${a.otp_code && !isPickedUp ? `<div style="font-size:13px;color:var(--muted);margin-bottom:9px;">OTP: <b style="color:var(--text);letter-spacing:3px;font-size:15px;">${escHtml(String(a.otp_code))}</b></div>` : ""}
+          <div class="assign-actions">
+            ${!isPickedUp
+              ? `<button class="btn-pickup" onclick="markPickup(${a.pickup_id})">Mark as Picked Up</button>`
+              : `<button class="btn-deliver" onclick="openOtp(${a.pickup_id}, '${escHtml(foodType)}', '${escHtml(a.ngo_name || "NGO")}')">Verify &amp; Deliver</button>`}
+          </div>
+        </div>`;
+    }
+
+    // ── RENDER dashboard available list ─────────────────────────────────────
+    function renderDashAssignments(filtered) {
+      const el = document.getElementById("assignmentListDash");
+      const badge = document.getElementById("assignBadge");
+      if (filtered.length === 0 && allDashData.length > 0) {
+        el.innerHTML = `<div class="filter-no-results">No donations match your filters. <a href='#' onclick='resetDashFilters();return false;' style='color:var(--primary);'>Reset filters</a></div>`;
+      } else if (allDashData.length === 0) {
+        el.innerHTML = `<div class="empty-state"><span class="empty-icon">🍱</span>No open donations right now.</div>`;
+      } else {
+        el.innerHTML = filtered.slice(0, 3).map((p, i) => renderAvailableCard(p, i)).join("");
+      }
+      const liveCount = filtered.filter(p => !isExpired(p)).length;
+      if (badge) badge.textContent = liveCount + " items";
+    }
+
+    // ── DASHBOARD FEED ───────────────────────────────────────────────────────
+    async function loadAssignmentsDash() {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" });
+        const data = await res.json();
+        const available = data.available || [];
+        const mine = (data.data || []).filter(p => {
+          const s = (p.status || "").trim();
+          return s === "Pending" || s === "In Progress";
+        });
+        const delivered = (data.data || []).filter(p => (p.status || "").trim() === "Delivered");
+
+        const activeEl = document.getElementById("activeAssignmentsDash");
+        const activeBadge = document.getElementById("dashActiveBadge");
+        if (activeBadge) activeBadge.textContent = mine.length + " active";
+        if (mine.length > 0) {
+          activeEl.innerHTML = mine.map((a, i) => renderMyAssignment(a, i, true)).join("");
+        } else {
+          activeEl.innerHTML = `<div class="empty-state"><span class="empty-icon">📦</span>No active assignments. Accept one from the list below!</div>`;
+        }
+
+        const liveAvailable = available.filter(p => !isExpired(p));
+        const countBadge = document.getElementById("availableCountBadge");
+        if (countBadge) { countBadge.textContent = liveAvailable.length; countBadge.style.display = liveAvailable.length > 0 ? "inline-block" : "none"; }
+        const statAvail = document.getElementById("statAvailable");
+        if (statAvail) statAvail.textContent = liveAvailable.length;
+
+        allDashData = available;
+        buildPuneOptions("dashFilterPickup", "dashFilterDrop", available);
+        applyDashFilters();
+
+        const hbadge = document.getElementById("historyBadge");
+        if (hbadge) hbadge.textContent = delivered.length + " trips";
+        const hel = document.getElementById("historyListDash");
+        hel.innerHTML = delivered.length ? delivered.slice(0, 5).map(h => `
+          <div class="history-item">
+            <div class="h-icon">🍱</div>
+            <div class="h-info">
+              <div class="h-name">${escHtml(safeText(h.food_type, "Food item"))}</div>
+              <div class="h-meta">${escHtml(safeText(h.ngo_name, "NGO"))} · ${escHtml(safeText(h.time, ""))}</div>
+            </div>
+            <div class="h-right">${statusBadge("Delivered")}</div>
+          </div>`).join("")
+          : `<div class="empty-state"><span class="empty-icon">📭</span>No deliveries yet</div>`;
+      } catch (e) { console.error(e); }
+    }
+
+    // ── FULL ASSIGNMENTS PAGE ────────────────────────────────────────────────
+    async function loadAssignmentsFull() {
+      updateStatusVisibility();
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" });
+        const data = await res.json();
+        const available = data.available || [];
+        const mine = (data.data || []).filter(p => {
+          const s = (p.status || "").trim();
+          return s === "Pending" || s === "In Progress";
+        });
+
+        allAvailableData = available;
+        buildPuneOptions("filterPickupArea", "filterDropArea", available);
+
+        const mineBadge = document.getElementById("mineBadgeCount");
+        if (mineBadge) mineBadge.textContent = mine.length + " active";
+
+        applyFilters();
+
+        const myEl = document.getElementById("assignmentListFull");
+        myEl.innerHTML = mine.length
+          ? mine.map((a, i) => renderMyAssignment(a, i, false)).join("")
+          : `<div class="empty-state"><span class="empty-icon">📋</span>You haven't accepted any assignments yet.</div>`;
+      } catch (e) { console.error(e); }
+    }
+
+    // ── ACCEPT MODAL ─────────────────────────────────────────────────────────
+    function openAcceptModal(pickupId, food, donor, ngo, minsRemaining) {
+      if (volunteerStatus !== "Available") {
+        showToast(volunteerStatus === "Offline" ? "You're Offline. Update your status first." : "You're Busy. Complete your current delivery first.", "error");
+        return;
+      }
+      const pickupData = [...allAvailableData, ...allDashData].find(p => p.pickup_id === pickupId);
+      if (pickupData && isExpired(pickupData)) { showToast("This donation just expired. Refreshing…", "warn"); refreshAll(); return; }
+      if (pickupData && !canDeliverInTime(pickupData)) { showToast("Not enough time to complete this delivery.", "error"); return; }
+
+      pendingAcceptPickupId = pickupId;
+      const timeWarnEl = document.getElementById("modalTimeWarning");
+      const timeWarnTxt = document.getElementById("modalTimeWarningText");
+      const isTight = minsRemaining !== undefined && minsRemaining < TIGHT_THRESHOLD_MINUTES;
+      if (isTight && timeWarnEl && timeWarnTxt) {
+        timeWarnTxt.innerHTML = `Only <b>${Math.round(minsRemaining)} minutes</b> until this food expires. Head to the pickup immediately after accepting!`;
+        timeWarnEl.classList.add("show");
+      } else if (timeWarnEl) { timeWarnEl.classList.remove("show"); }
+
+      document.getElementById("acceptDetails").innerHTML =
+        `<strong style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Food</strong><br>${escHtml(food)}<br><br>` +
+        `<strong style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Pickup From</strong><br>${escHtml(donor)}<br><br>` +
+        `<strong style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Deliver To</strong><br>${escHtml(ngo)}`;
+      document.getElementById("acceptModal").classList.add("show");
+    }
+
+    async function confirmAcceptAssignment() {
+      if (!pendingAcceptPickupId) { closeModal("acceptModal"); return; }
+      if (volunteerStatus !== "Available") { showToast("Cannot accept — you are not Available.", "error"); closeModal("acceptModal"); return; }
+      const pickupData = [...allAvailableData, ...allDashData].find(p => p.pickup_id === pendingAcceptPickupId);
+      if (pickupData && isExpired(pickupData)) { showToast("This donation expired. Cannot claim.", "error"); closeModal("acceptModal"); refreshAll(); return; }
+      if (pickupData && !canDeliverInTime(pickupData)) { showToast("Not enough time remaining.", "error"); closeModal("acceptModal"); return; }
+
+      const btn = document.getElementById("acceptConfirmBtn");
+      btn.textContent = "Claiming…"; btn.disabled = true;
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/accept-assignment`, {
+          method: "POST", credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pickup_id: pendingAcceptPickupId })
+        });
+        const result = await res.json();
+        closeModal("acceptModal");
+        if (result.success) {
+          volunteerStatus = "Busy"; updateStatusVisibility();
+          showToast("Assignment accepted! Your OTP: " + result.otp, "success");
+          refreshAll();
+        } else { showToast(result.error || "Could not claim assignment.", "error"); refreshAll(); }
+      } catch (e) { showToast("Network error.", "error"); }
+      finally { btn.textContent = "Accept & Claim →"; btn.disabled = false; pendingAcceptPickupId = null; }
+    }
+
+    // ── HISTORY FULL ─────────────────────────────────────────────────────────
+    async function loadHistoryFull() {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" });
+        const data = await res.json();
+        const delivered = (data.data || []).filter(p => (p.status || "").trim() === "Delivered");
+        const el = document.getElementById("historyListFull");
+        el.innerHTML = delivered.length ? delivered.map(h => `
+          <div class="history-item">
+            <div class="h-icon">🍱</div>
+            <div class="h-info">
+              <div class="h-name">${escHtml(safeText(h.food_type, "Food item"))}</div>
+              <div class="h-meta">${escHtml(safeText(h.donor_name, "Donor"))} → ${escHtml(safeText(h.ngo_name, "NGO"))} · ${escHtml(safeText(h.time, ""))}</div>
+            </div>
+            <div class="h-right">${statusBadge("Delivered")}</div>
+          </div>`).join("")
+          : `<div class="empty-state"><span class="empty-icon">📭</span>No deliveries completed yet</div>`;
+      } catch (e) { console.error(e); }
+    }
+
+    // ── WASTED DONATIONS ─────────────────────────────────────────────────────
+    async function loadWastedDonations() {
+      try {
+        let wastedDonations = [];
+        try {
+          const res = await fetch(`${BASE}/api/volunteer/wasted-donations`, { credentials: "include" });
+          if (res.ok) {
+            const data = await res.json();
+            wastedDonations = data.data || [];
+          }
+        } catch (_) {}
+
+        if (wastedDonations.length === 0) {
+          const res2 = await fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" });
+          const data2 = await res2.json();
+          const available = data2.available || [];
+          wastedDonations = available.filter(p => isExpired(p));
+        }
+
+        const list = document.getElementById("wastedList");
+        const badge = document.getElementById("wastedCount");
+        const navBadge = document.getElementById("wastedNavBadge");
+
+        if (badge) badge.textContent = wastedDonations.length + " donation" + (wastedDonations.length !== 1 ? "s" : "");
+        if (navBadge) {
+          navBadge.textContent = wastedDonations.length;
+          navBadge.style.display = wastedDonations.length > 0 ? "inline-block" : "none";
+        }
+
+        if (!wastedDonations.length) {
+          list.innerHTML = `<div class="empty-state"><span class="empty-icon">✅</span>No wasted donations right now!</div>`;
+          return;
+        }
+
+        list.innerHTML = wastedDonations.map((d, i) => {
+          const orig = parseInt(d.original_quantity) || parseInt(d.quantity) || 0;
+          const qty = parseInt(d.quantity) || 0;
+          const accepted = Math.max(0, orig - qty);
+          const availUntil = safeText(d.time || d.available_until, "Not set");
+          const donationDate = safeText(d.date_of_donation, "—");
+          const donorName = escHtml(safeText(d.donor_name, "Unknown Donor"));
+          const ngoName = escHtml(safeText(d.ngo_name, "Unknown NGO"));
+          const foodType = escHtml(safeText(d.food_type, "Unknown food"));
+
+          return `
+            <div class="wasted-item" style="animation-delay:${i * 0.07}s">
+              <div class="wasted-icon">🍱</div>
+              <div class="wasted-info">
+                <div class="wasted-name">${foodType}</div>
+                <div class="wasted-meta">
+                  <span>${donationDate}</span>
+                  <span>·</span>
+                  <span>Available until: <strong>${escHtml(availUntil)}</strong></span>
+                  <span>·</span>
+                  <span>Donor: ${donorName}</span>
+                  ${ngoName !== "Unknown NGO" ? `<span>·</span><span>NGO: ${ngoName}</span>` : ""}
+                </div>
+                <div class="wasted-meta" style="margin-top:4px;">
+                  <span>Quantity: <strong>${orig || qty}</strong></span>
+                  ${accepted > 0 ? `<span>·</span><span style="color:var(--warning);">⚖ ${accepted} partially accepted</span>` : ""}
+                </div>
+                <div class="wasted-explanation">
+                  <span class="why-label">Why expired?</span>
+                  Listed until <strong>${escHtml(availUntil)}</strong> on <strong>${donationDate}</strong>, but no volunteer claimed it before the deadline.
+                  ${accepted > 0 ? `<br>${accepted} unit(s) were partially accepted; ${qty} remaining units expired uncollected.` : ""}
+                </div>
+              </div>
+              <div style="flex-shrink:0;">
+                <span class="wasted-status-label">Expired</span>
+              </div>
+            </div>`;
+        }).join("");
+      } catch (e) { console.error(e); }
+    }
+
+    // ── PROFILE ──────────────────────────────────────────────────────────────
+    async function loadVolProfile() {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/profile`, { credentials: "include" });
+        const data = await res.json();
+        if (data.error) return;
+        document.getElementById("vol_name").value = safeText(data.name, "");
+        document.getElementById("vol_contact").value = safeText(data.contact_no, "");
+        const veh = document.getElementById("vol_vehicle"), avail = document.getElementById("vol_availability");
+        if (veh) { veh.value = data.vehicle_type || "None"; onVehicleChange(veh.value); }
+        if (avail) { avail.value = data.availability_status || "Available"; onAvailabilityChange(avail.value); }
+        const displayName = safeText(data.name, "Volunteer");
+        const contact = safeText(data.contact_no, "—");
+        document.getElementById("volDisplayName").textContent = displayName;
+        document.getElementById("volDisplayContact").textContent = contact;
+        document.getElementById("sidebarStatus").textContent = safeText(data.availability_status, "Available");
+        const avatarEl = document.getElementById("volAvatarInitial");
+        if (avatarEl) avatarEl.textContent = displayName[0].toUpperCase();
+        volunteerStatus = data.availability_status || "Available";
+        volunteerVehicle = data.vehicle_type || "None";
+        updateStatusVisibility();
+        const badge = document.getElementById("volStatusBadge"), val = document.getElementById("volStatusVal");
+        if (badge && val) {
+          val.textContent = safeText(data.availability_status, "Available");
+          const s = data.availability_status || "Available";
+          badge.className = "status-badge" + (s === "Offline" ? " offline" : s === "Busy" ? " busy" : "");
+        }
+      } catch (e) { console.error(e); }
+    }
+
+    async function saveVolProfile() {
+      const name = document.getElementById("vol_name").value.trim();
+      if (!name) { showToast("Name cannot be empty.", "error"); return; }
+      const newAvail = document.getElementById("vol_availability").value;
+      const newVehicle = document.getElementById("vol_vehicle").value;
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/update`, {
+          method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, contact_no: document.getElementById("vol_contact").value.trim(), vehicle_type: newVehicle, availability_status: newAvail })
+        });
+        const result = await res.json();
+        if (result.success) {
+          volunteerStatus = newAvail; volunteerVehicle = newVehicle; updateStatusVisibility();
+          showToast("Profile saved successfully.", "success");
+          document.getElementById("sidebarName").textContent = name;
+          document.getElementById("volDisplayName").textContent = name;
+          const avatarEl = document.getElementById("volAvatarInitial");
+          if (avatarEl) avatarEl.textContent = name[0].toUpperCase();
+          document.getElementById("sidebarStatus").textContent = newAvail;
+          const badge = document.getElementById("volStatusBadge"), val = document.getElementById("volStatusVal");
+          if (badge && val) { val.textContent = newAvail; badge.className = "status-badge" + (newAvail === "Offline" ? " offline" : newAvail === "Busy" ? " busy" : ""); }
+          document.getElementById("statusWarnBox").classList.remove("show");
+          document.getElementById("statusErrorBox").classList.remove("show");
+        } else { showToast(result.error || "Save failed.", "error"); }
+      } catch (e) { showToast("Network error.", "error"); }
+    }
+
+    // ── IMPACT SCORE ─────────────────────────────────────────────────────────
+    async function loadImpactScore() {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/stats`, { credentials: "include" });
+        const data = await res.json();
+        if (data.success) {
+          const s = data.stats;
+          document.getElementById("impactDelivered").textContent = s.delivered ?? 0;
+          document.getElementById("impactMeals").textContent = (s.delivered ?? 0) * 10;
+          document.getElementById("impactTotal").textContent = s.total ?? 0;
+        }
+        const res2 = await fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" });
+        const data2 = await res2.json();
+        const all = (data2.data || []).filter(p => (p.status || "").trim() === "Delivered");
+        const el = document.getElementById("impactHistoryList");
+        el.innerHTML = all.length ? all.map(h => `
+          <div class="history-item">
+            <div class="h-icon">🍱</div>
+            <div class="h-info">
+              <div class="h-name">${escHtml(safeText(h.food_type, "Food item"))}</div>
+              <div class="h-meta">${escHtml(safeText(h.donor_name, "Donor"))} → ${escHtml(safeText(h.ngo_name, "NGO"))} · ${escHtml(safeText(h.time, ""))}</div>
+            </div>
+            <div class="h-right">${statusBadge("Delivered")}</div>
+          </div>`).join("")
+          : `<div class="empty-state"><span class="empty-icon">🏆</span>Complete deliveries to build your score!</div>`;
+      } catch (e) { console.error(e); }
+    }
+
+    // ── MARK PICKED UP ───────────────────────────────────────────────────────
+    async function markPickup(pickupId) {
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/update-pickup`, {
+          method: "POST", credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pickup_id: pickupId, status: "In Progress" })
+        });
+        const result = await res.json();
+        if (result.success) { showToast("Marked as picked up! Head to the NGO.", "success"); refreshAll(); }
+        else { showToast(result.error || "Failed to update.", "error"); }
+      } catch (e) { showToast("Network error.", "error"); }
+    }
+
+    // ── OTP MODAL ────────────────────────────────────────────────────────────
+    function openOtp(pickupId, food, ngo) {
+      currentDeliveryPickupId = pickupId;
+      document.getElementById("otpDetails").innerHTML =
+        `<strong style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Food</strong><br>${escHtml(food)}<br><br>` +
+        `<strong style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Deliver to</strong><br>${escHtml(ngo)}`;
+      document.getElementById("otpInput").value = "";
+      document.getElementById("otpInput").style.borderColor = "";
+      document.getElementById("otpModal").classList.add("show");
+      setTimeout(() => document.getElementById("otpInput").focus(), 200);
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("show");
+      if (id === "otpModal") currentDeliveryPickupId = null;
+      if (id === "acceptModal") {
+        pendingAcceptPickupId = null;
+        const tw = document.getElementById("modalTimeWarning");
+        if (tw) tw.classList.remove("show");
+      }
+    }
+
+    async function verifyOtp() {
+      const otp = document.getElementById("otpInput").value.trim();
+      if (!otp) { showToast("Please enter the OTP.", "error"); return; }
+      if (!currentDeliveryPickupId) { showToast("No active delivery selected.", "error"); return; }
+      try {
+        const res = await fetch(`${BASE}/api/volunteer/update-pickup`, {
+          method: "POST", credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pickup_id: currentDeliveryPickupId, status: "Delivered", otp })
+        });
+        const result = await res.json();
+        if (result.success) {
+          volunteerStatus = "Available"; updateStatusVisibility();
+          showToast("Delivery verified! Great work!", "success");
+          closeModal("otpModal"); refreshAll();
+        } else {
+          showToast(result.error || "Invalid OTP. Please try again.", "error");
+          const inp = document.getElementById("otpInput");
+          inp.style.borderColor = "var(--error)"; inp.select();
+          setTimeout(() => inp.style.borderColor = "", 2500);
+        }
+      } catch (e) { showToast("Network error.", "error"); }
+    }
+
+    // ── REFRESH ALL ──────────────────────────────────────────────────────────
+    function refreshAll() {
+      loadMe();
+      loadStats();
+      loadAssignmentsDash();
+      fetch(`${BASE}/api/volunteer/pickups`, { credentials: "include" })
+        .then(r => r.json())
+        .then(data => {
+          const expired = (data.available || []).filter(p => isExpired(p));
+          const nb = document.getElementById("wastedNavBadge");
+          if (nb) { nb.textContent = expired.length; nb.style.display = expired.length > 0 ? "inline-block" : "none"; }
+        })
+        .catch(() => {});
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      buildPuneOptions("dashFilterPickup", "dashFilterDrop", []);
+      buildPuneOptions("filterPickupArea", "filterDropArea", []);
+      refreshAll();
+      loadVolProfile();
+      setInterval(refreshAll, 20000);
+    });
+  </script>
+</body>
+</html>

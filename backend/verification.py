@@ -1,16 +1,15 @@
 """Verification features for FoodBridge: donor FSSAI licence, NGO registration,
 volunteer ID, plus a small admin web page to approve or reject.
 
-Setup (in app.py, AFTER init_mobile_auth(app)):
-    from verification import init_verification
-    init_verification(app)
-Run verification.sql once. On PythonAnywhere set env var ADMIN_PASSWORD (WSGI file).
+Uploaded documents are stored in the database (table verification_file), so they
+survive restarts on hosts with a temporary disk such as Render's free plan.
+Wired in from app.py: init_verification(app). Needs env var ADMIN_PASSWORD.
 """
 import hmac
 import json
 import os
 
-from flask import jsonify, redirect, render_template_string, request, send_file, session
+from flask import Response, jsonify, redirect, render_template_string, request, session
 from werkzeug.utils import secure_filename
 
 from db import mysql
@@ -23,7 +22,8 @@ FIELDS = {"donor": (["fssai_no"], ["license_file"]),
           "ngo": (["darpan_id", "contact_person"], ["reg_file"]),
           "volunteer": (["vehicle_no", "emergency_contact"], ["id_file", "selfie_file"])}
 GATED = {("POST", "/api/ngo/accept-donation"): "ngo", ("POST", "/api/volunteer/accept-assignment"): "volunteer"}
-UPLOADS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "private_uploads")  # never served publicly
+MIME = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".pdf": "application/pdf"}
+MAGIC = {"image/jpeg": b"\xff\xd8\xff", "image/png": b"\x89PNG", "application/pdf": b"%PDF"}
 
 PAGE = """<!doctype html><meta name=viewport content="width=device-width,initial-scale=1"><title>FoodBridge admin</title>
 <style>body{font-family:sans-serif;max-width:720px;margin:20px auto;padding:0 12px}.c{border:1px solid #ddd;border-radius:8px;padding:12px;margin:12px 0}button{padding:8px 14px;margin-right:6px}</style>
@@ -49,9 +49,20 @@ def q(sql, args=(), one=False, commit=False):
     return out
 
 
+def serve_file(key):
+    row = q("SELECT mime, content FROM verification_file WHERE file_key=%s", (key,), one=True)
+    if not row:
+        return jsonify(error="No such file"), 404
+    return Response(row[1], mimetype=row[0], headers={"X-Content-Type-Options": "nosniff",
+                                                       "Cache-Control": "private, no-store"})
+
+
 def init_verification(app):
     app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
     app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    if os.environ.get("RENDER"):
+        app.config["SESSION_COOKIE_SECURE"] = True
 
     def verified(table, name_col, name):
         return bool(name) and bool(q(f"SELECT 1 FROM {table} WHERE LOWER(TRIM({name_col}))=LOWER(TRIM(%s)) "
@@ -67,26 +78,31 @@ def init_verification(app):
             if not row or row[0] != "Verified":
                 return jsonify(error="Your account must be verified first. Open the Verify tab."), 403
 
-    # Adds badges and food details to existing responses so your old routes stay untouched
+    # Adds badges and food details to existing responses so the old routes stay untouched.
+    # A failure here must never break the main request, so everything is guarded.
     @app.after_request
     def enrich(resp):
-        if request.method == "POST" and request.path == "/api/donations" and resp.status_code == 201:
-            d = request.get_json(silent=True) or {}
-            q("UPDATE food_donation SET cooked_at=%s, is_veg=%s WHERE donation_id=%s",
-              (d.get("cooked_at") or None, 0 if d.get("is_veg") is False else 1, resp.get_json().get("donation_id")), commit=True)
-        if request.path in ("/api/ngo/available-donations", "/api/donor/donations") and resp.status_code == 200:
-            body = resp.get_json(silent=True)
-            for r in (body or {}).get("data", []):
-                if r.get("donor_name"):
-                    r["donor_verified"] = verified("donor", "donor_name", r["donor_name"])
-                info = q("SELECT cooked_at, is_veg FROM food_donation WHERE donation_id=%s", (r["donation_id"],), one=True)
-                r["cooked_at"], r["is_veg"] = (info[0], info[1]) if info else (None, 1)
-                if r.get("volunteer_name"):
-                    r["volunteer_verified"] = verified("volunteer", "name", r["volunteer_name"])
-                    v = q("SELECT vehicle_no FROM volunteer WHERE LOWER(TRIM(name))=LOWER(TRIM(%s))", (r["volunteer_name"],), one=True)
-                    r["volunteer_vehicle"] = v[0] if v else None
-            if body:
-                resp.set_data(json.dumps(body))
+        try:
+            if request.method == "POST" and request.path == "/api/donations" and resp.status_code == 201:
+                d = request.get_json(silent=True) or {}
+                cooked = str(d.get("cooked_at") or "")[:5] or None
+                q("UPDATE food_donation SET cooked_at=%s, is_veg=%s WHERE donation_id=%s",
+                  (cooked, 0 if d.get("is_veg") is False else 1, resp.get_json().get("donation_id")), commit=True)
+            if request.path in ("/api/ngo/available-donations", "/api/donor/donations") and resp.status_code == 200:
+                body = resp.get_json(silent=True)
+                for r in (body or {}).get("data", []):
+                    if r.get("donor_name"):
+                        r["donor_verified"] = verified("donor", "donor_name", r["donor_name"])
+                    info = q("SELECT cooked_at, is_veg FROM food_donation WHERE donation_id=%s", (r["donation_id"],), one=True)
+                    r["cooked_at"], r["is_veg"] = (info[0], info[1]) if info else (None, 1)
+                    if r.get("volunteer_name"):
+                        r["volunteer_verified"] = verified("volunteer", "name", r["volunteer_name"])
+                        v = q("SELECT vehicle_no FROM volunteer WHERE LOWER(TRIM(name))=LOWER(TRIM(%s))", (r["volunteer_name"],), one=True)
+                        r["volunteer_vehicle"] = v[0] if v else None
+                if body:
+                    resp.set_data(json.dumps(body))
+        except Exception as e:                      # never let enrichment break a request
+            print("verification enrich error:", e)
         return resp
 
     @app.get("/api/verify/me")
@@ -115,16 +131,25 @@ def init_verification(app):
             return jsonify(error="NGO Darpan ID and contact person are required"), 400
         if role == "volunteer" and not (vals["emergency_contact"].isdigit() and len(vals["emergency_contact"]) >= 10):
             return jsonify(error="Enter a valid emergency contact number"), 400
-        os.makedirs(UPLOADS, exist_ok=True)
+        blobs = {}
         for k in files:
             f = request.files.get(k)
             ext = os.path.splitext(secure_filename(f.filename or ""))[1].lower() if f else ""
-            if ext not in (".jpg", ".jpeg", ".png", ".pdf"):
+            data = f.read() if f else b""
+            mime = MIME.get(ext)
+            if not mime or not data or not data.startswith(MAGIC[mime]):
                 return jsonify(error="Please attach every photo (jpg or png)"), 400
-            vals[k] = f"{role}_{session['user_id']}_{k}{ext}"
-            f.save(os.path.join(UPLOADS, vals[k]))
+            key = f"{role}_{session['user_id']}_{k}{ext}"
+            vals[k] = key
+            blobs[key] = (mime, data)
+        conn = mysql.connection
+        cur = conn.cursor()
+        for key, (mime, data) in blobs.items():
+            cur.execute("REPLACE INTO verification_file (file_key, mime, content) VALUES (%s,%s,%s)", (key, mime, data))
         sets = ",".join(f"{k}=%s" for k in vals)
-        q(f"UPDATE {t} SET {sets}, verify_status='Pending' WHERE {idc}=%s", (*vals.values(), session["user_id"]), commit=True)
+        cur.execute(f"UPDATE {t} SET {sets}, verify_status='Pending' WHERE {idc}=%s", (*vals.values(), session["user_id"]))
+        conn.commit()
+        cur.close()
         return jsonify(success=True)
 
     # A donor can see the selfie of the volunteer assigned to their own donation
@@ -135,14 +160,14 @@ def init_verification(app):
                 (did, session.get("user_id")), one=True) if session.get("role") == "donor" else None
         if not row or not row[0]:
             return jsonify(error="No photo"), 404
-        return send_file(os.path.join(UPLOADS, row[0]))
+        return serve_file(row[0])
 
     # ---- admin web page ----
     pw = os.environ.get("ADMIN_PASSWORD", "")
 
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():
-        if request.method == "POST" and pw and hmac.compare_digest(request.form.get("pw", ""), pw):
+        if request.method == "POST" and pw and hmac.compare_digest(request.form.get("pw", "").encode(), pw.encode()):
             session["is_admin"] = True
             return redirect("/admin")
         return LOGIN
@@ -163,7 +188,7 @@ def init_verification(app):
     def admin_file(fname):
         if not session.get("is_admin"):
             return redirect("/admin/login")
-        return send_file(os.path.join(UPLOADS, secure_filename(fname)))
+        return serve_file(fname)
 
     @app.post("/admin/decide")
     def admin_decide():

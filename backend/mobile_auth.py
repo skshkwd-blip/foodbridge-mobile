@@ -1,12 +1,8 @@
-"""Bearer-token login for the FoodBridge mobile app.
+"""Token login for the FoodBridge mobile app.
 
-Your existing /api/... routes read Flask's `session`. This hook fills `session`
-from a token, so every existing route works for the app with no other changes.
-
-Setup:  pip install pyjwt
-In app.py, right after `mysql.init_app(app)` add:
-    from mobile_auth import init_mobile_auth
-    init_mobile_auth(app)
+The existing /api/... routes read Flask's `session`. A before_request hook fills
+`session` from the app's bearer token, so every existing route works for the app
+unchanged. Wired in from app.py: init_mobile_auth(app)
 """
 import datetime
 
@@ -14,11 +10,12 @@ import jwt
 from flask import jsonify, request, session
 
 from db import mysql
+from passwords import check_pw, hash_pw
 
 FIND = {
     "donor": "SELECT donor_id, donor_name, password FROM donor WHERE LOWER(TRIM(donor_name))=LOWER(TRIM(%s))",
-    "ngo": "SELECT ngo_id, ngo_name, NULL FROM ngo WHERE LOWER(TRIM(ngo_name))=LOWER(TRIM(%s))",
-    "volunteer": "SELECT volunteer_id, name, NULL FROM volunteer WHERE LOWER(TRIM(name))=LOWER(TRIM(%s))",
+    "ngo": "SELECT ngo_id, ngo_name, password FROM ngo WHERE LOWER(TRIM(ngo_name))=LOWER(TRIM(%s))",
+    "volunteer": "SELECT volunteer_id, name, password FROM volunteer WHERE LOWER(TRIM(name))=LOWER(TRIM(%s))",
 }
 
 
@@ -41,7 +38,7 @@ def init_mobile_auth(app):
 
     @app.post("/api/auth/login")
     def mobile_login():
-        d = request.get_json(force=True)
+        d = request.get_json(force=True, silent=True) or {}
         role, name = str(d.get("role", "")).lower(), str(d.get("name", "")).strip()
         if role not in FIND or not name:
             return jsonify(error="Enter your name and choose a role"), 400
@@ -51,32 +48,33 @@ def init_mobile_auth(app):
         cur.close()
         if not row:
             return jsonify(error="No account with that name"), 401
-        if role == "donor" and str(row[2]).strip() != str(d.get("password", "")).strip():
+        if not check_pw(row[2], d.get("password", "")):
             return jsonify(error="Incorrect password"), 401
         return reply(row[0], row[1], role)
 
     @app.post("/api/auth/signup")
     def mobile_signup():
-        d = request.get_json(force=True)
+        d = request.get_json(force=True, silent=True) or {}
         role, name = str(d.get("role", "")).lower(), str(d.get("name", "")).strip()
         email, mobile = str(d.get("email", "")).strip(), str(d.get("mobile", "")).strip()
         password = str(d.get("password", "")).strip()
-        if role not in FIND or not name or not email or not password:
-            return jsonify(error="Name, email, password and role are required"), 400
+        if role not in FIND or not name or not email or len(password) < 6:
+            return jsonify(error="Name, email, role and a password of at least 6 characters are required"), 400
         cur = mysql.connection.cursor()
         cur.execute(FIND[role], (name,))
         if cur.fetchone():
             cur.close()
             return jsonify(error="That name is already registered"), 409
+        pw = hash_pw(password)
         if role == "donor":
             cur.execute("INSERT INTO donor (donor_name,donor_type,contact_no,address,hygiene_rating,password,role,email) "
-                        "VALUES (%s,'Individual',%s,'',0,%s,'donor',%s)", (name, mobile, password, email))
+                        "VALUES (%s,'Individual',%s,'',0,%s,'donor',%s)", (name, mobile, pw, email))
         elif role == "volunteer":
-            cur.execute("INSERT INTO volunteer (name,contact_no,vehicle_type,availability_status) "
-                        "VALUES (%s,%s,'None','Available')", (name, mobile))
+            cur.execute("INSERT INTO volunteer (name,contact_no,vehicle_type,availability_status,password) "
+                        "VALUES (%s,%s,'None','Available',%s)", (name, mobile, pw))
         else:
-            cur.execute("INSERT INTO ngo (ngo_name,contact_no,address,capacity,priority_level) "
-                        "VALUES (%s,%s,%s,0,'Medium')", (name, mobile, d.get("address", "")))
+            cur.execute("INSERT INTO ngo (ngo_name,contact_no,address,capacity,priority_level,password) "
+                        "VALUES (%s,%s,%s,0,'Medium',%s)", (name, mobile, d.get("address", ""), pw))
         mysql.connection.commit()
         new_id = cur.lastrowid
         cur.close()
