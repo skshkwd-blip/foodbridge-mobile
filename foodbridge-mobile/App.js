@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
 // Your PythonAnywhere address, https, no trailing slash
-const BASE = "https://YOURUSERNAME.pythonanywhere.com";
+const BASE = "https://sakshi06kawade.pythonanywhere.com";
 
 const C = { ink: "#1F2A24", leaf: "#2F6B4F", paper: "#FAFAF7", line: "#DDE3DC", bad: "#B3402A", gold: "#B7791F" };
 
